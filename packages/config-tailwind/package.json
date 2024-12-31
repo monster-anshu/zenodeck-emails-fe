@@ -1,0 +1,16 @@
+{
+  "name": "@repo/config-tailwind",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "./tailwind.config.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  },
+  "dependencies": {
+    "tailwindcss-animate": "^1.0.7"
+  }
+}
