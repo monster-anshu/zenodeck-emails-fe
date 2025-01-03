@@ -1,4 +1,4 @@
-import type { Route } from "./+types/index";
+import type { Route } from "./+types/_index";
 import { Button } from "@repo/ui/components/button";
 
 export function meta({}: Route.MetaArgs) {
@@ -8,7 +8,7 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function Home() {
+export default function IndexPage() {
   return (
     <main>
       <h1>Hello world</h1>

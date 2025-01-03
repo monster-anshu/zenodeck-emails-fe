@@ -69,6 +69,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@react-router/fs-routes':
+        specifier: ^7.1.1
+        version: 7.1.1(@react-router/dev@7.1.1(@react-router/serve@7.1.1(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4))(@types/node@20.17.6)(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)))(typescript@5.5.4)
       '@react-router/node':
         specifier: ^7.1.1
         version: 7.1.1(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4)
@@ -847,6 +850,16 @@ packages:
     peerDependencies:
       express: ^4.17.1
       react-router: 7.1.1
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@react-router/fs-routes@7.1.1':
+    resolution: {integrity: sha512-FXe4d5sKRwa3Yj1xz4rtnxpmwG1IENr+Jd8fQd4IxbC6u/HJrIURacq1l83cTr62Uerf5N4h3v3pGgDEmmGwcg==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      '@react-router/dev': ^7.1.1
       typescript: ^5.1.0
     peerDependenciesMeta:
       typescript:
@@ -3489,6 +3502,13 @@ snapshots:
       '@react-router/node': 7.1.1(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4)
       express: 4.21.2
       react-router: 7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+    optionalDependencies:
+      typescript: 5.5.4
+
+  '@react-router/fs-routes@7.1.1(@react-router/dev@7.1.1(@react-router/serve@7.1.1(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4))(@types/node@20.17.6)(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6)))(typescript@5.5.4)':
+    dependencies:
+      '@react-router/dev': 7.1.1(@react-router/serve@7.1.1(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4))(@types/node@20.17.6)(react-router@7.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(typescript@5.5.4)(vite@5.4.11(@types/node@20.17.6))
+      minimatch: 9.0.5
     optionalDependencies:
       typescript: 5.5.4
 
