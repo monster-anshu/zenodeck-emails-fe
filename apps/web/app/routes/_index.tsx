@@ -1,5 +1,5 @@
-import type { Route } from "./+types/_index";
 import { Button } from "@repo/ui/components/button";
+import type { Route } from "./+types/_index";
 
 export function meta({}: Route.MetaArgs) {
   return [

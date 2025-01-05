@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
 import sharedConfig from "@repo/config-tailwind";
+import type { Config } from "tailwindcss";
 
 export default {
   content: [
