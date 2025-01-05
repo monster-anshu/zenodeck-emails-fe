@@ -1,0 +1,25 @@
+{
+  "name": "@repo/email-editor",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {
+    "@repo/config-eslint": "workspace:*",
+    "@repo/config-typescript": "workspace:*",
+    "@types/node": "^20",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1",
+    "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "@grapesjs/react": "^1.0.0",
+    "@repo/config-tailwind": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "grapesjs": "^0.22.4",
+    "juice": "^10.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.2.1",
+    "tailwind-merge": "^2.6.0"
+  }
+}
