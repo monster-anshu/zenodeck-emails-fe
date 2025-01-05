@@ -1,5 +1,10 @@
 {
-  "name": "zenodeck-emails-fe",
+  "name": "monorepo-frontend",
+  "author": {
+    "name": "Himanshu Gunwant",
+    "email": "info@himanshu-gunwant.com",
+    "url": "https://himanshu-gunwant.com"
+  },
   "private": true,
   "scripts": {
     "build": "turbo build",
