@@ -216,7 +216,7 @@ importers:
   packages/email-editor:
     dependencies:
       '@grapesjs/react':
-        specifier: ^1.0.0
+        specifier: '*'
         version: 1.0.0
       '@repo/config-tailwind':
         specifier: workspace:*

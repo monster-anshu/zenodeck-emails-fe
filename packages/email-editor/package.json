@@ -12,7 +12,7 @@
     "tailwindcss": "^3.4.3"
   },
   "dependencies": {
-    "@grapesjs/react": "^1.0.0",
+    "@grapesjs/react": "*",
     "@repo/config-tailwind": "workspace:*",
     "@repo/ui": "workspace:*",
     "grapesjs": "^0.22.4",
