@@ -35,8 +35,6 @@ const emailEditorPlugin: Plugin<PluginOptions> = (
     ],
     block: () => ({}),
     juiceOpts: {},
-    cmdOpenImport: "gjs-open-import-template",
-    cmdTglImages: "gjs-toggle-images",
     cmdInlineHtml: "gjs-get-inlined-html",
     modalTitleImport: "Import template",
     modalTitleExport: "Export template",

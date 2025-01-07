@@ -1,11 +1,12 @@
 import type { Editor } from "grapesjs";
+import { cmdOpenImport } from "./consts";
 import { PluginOptions } from "./types";
 
 export default (editor: Editor, opts: Required<PluginOptions>) => {
   const cmdm = editor.Commands;
   const pfx = editor.getConfig().stylePrefix;
 
-  cmdm.add(opts.cmdOpenImport, {
+  cmdm.add(cmdOpenImport, {
     containerEl: null as HTMLDivElement | null,
     codeEditorHtml: null as HTMLDivElement | null,
 

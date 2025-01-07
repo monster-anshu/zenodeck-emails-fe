@@ -1,4 +1,4 @@
-import GjsEditor, { Canvas, TraitsProvider } from "@grapesjs/react";
+import GjsEditor, { Canvas, TraitsProvider, WithEditor } from "@grapesjs/react";
 import Spinner from "@repo/ui/components/spinner";
 import { getImageDimensions } from "@repo/ui/lib/file";
 import type { Editor, EditorConfig } from "grapesjs";
@@ -17,7 +17,7 @@ import {
   openTraits,
 } from "./email-editor-plugin/consts";
 import { IVariable } from "./email-editor-plugin/types";
-import "./style.scss";
+import "./style.css";
 import template from "./templates/template.json";
 
 interface IEmailEditorComponentProps {
@@ -27,28 +27,6 @@ interface IEmailEditorComponentProps {
   editorRef?: RefObject<Editor | null>;
   variables?: IVariable[];
 }
-
-const gjsOptions: EditorConfig = {
-  height: "100vh",
-  storageManager: false,
-  undoManager: { trackSelection: false },
-  selectorManager: { componentFirst: true },
-  projectData: {
-    assets: [
-      "https://via.placeholder.com/350x250/78c5d6/fff",
-      "https://via.placeholder.com/350x250/459ba8/fff",
-      "https://via.placeholder.com/350x250/79c267/fff",
-      "https://via.placeholder.com/350x250/c5d647/fff",
-      "https://via.placeholder.com/350x250/f28c33/fff",
-    ],
-    pages: [
-      {
-        name: "Home page",
-        component: `<h1>GrapesJS React Custom UI</h1>`,
-      },
-    ],
-  },
-};
 
 export default function EmailEditorComponent({
   onUpload,
@@ -169,7 +147,9 @@ export default function EmailEditorComponent({
         grapesjsCss={grapesjsCss}
         options={editorConfig}
       >
-        <Topbar isVisible={!isPreview} />
+        <WithEditor>
+          <Topbar isVisible={!isPreview} />
+        </WithEditor>
         <div>
           <Canvas className="overflow-auto bg-white" />
         </div>

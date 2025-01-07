@@ -29,18 +29,6 @@ export interface PluginOptions {
   cellStyle?: Record<string, string>;
 
   /**
-   * Import command id.
-   * @default 'gjs-open-import-template'
-   */
-  cmdOpenImport?: string;
-
-  /**
-   * Toggle images command id.
-   * @default 'gjs-toggle-images'
-   */
-  cmdTglImages?: string;
-
-  /**
    * Get inlined HTML command id.
    * @default 'gjs-get-inlined-html'
    */
