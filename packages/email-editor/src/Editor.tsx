@@ -23,8 +23,8 @@ interface IEmailEditorComponentProps {
   onUpload?: (file: File) => Promise<string>;
   intialProjectData?: object;
   className?: string;
-  editorRef: RefObject<Editor | null>;
-  variables: IVariable[];
+  editorRef?: RefObject<Editor | null>;
+  variables?: IVariable[];
 }
 
 export default function EmailEditorComponent({
@@ -32,7 +32,7 @@ export default function EmailEditorComponent({
   className,
   editorRef: extRef,
   intialProjectData,
-  variables,
+  variables = [],
 }: IEmailEditorComponentProps) {
   const editorRef = useRef(null as null | Editor);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,9 @@ export default function EmailEditorComponent({
     } as Record<string, typeof activeView>;
 
     editorRef.current = editor;
-    extRef.current = editor;
+    if (extRef) {
+      extRef.current = editor;
+    }
 
     editor.on("run", (event) => {
       const active = record[event];
@@ -79,7 +81,7 @@ export default function EmailEditorComponent({
       appendTo: "#custom-style-manager",
     },
     pluginsOpts: {
-      [emailEditorPlugin as any]: {
+      [emailEditorPlugin as never]: {
         variables,
       },
     },

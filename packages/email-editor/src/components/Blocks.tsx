@@ -19,7 +19,7 @@ export default function Blocks({ isVisible }: IBlocksProps) {
             {blocks.map((block, i) => {
               return (
                 <div
-                  className=" hover:bg-p1/20 flex aspect-square h-full w-20 flex-col rounded-lg border p-2 text-center"
+                  className="hover:bg-primary/20 flex aspect-square h-full w-20 flex-col rounded-lg border p-2 text-center"
                   key={block.id || i}
                   onDragStart={(ev) => dragStart(block, ev.nativeEvent)}
                   onDragEnd={() => dragStop(false)}

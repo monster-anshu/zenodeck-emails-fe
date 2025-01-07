@@ -5,6 +5,7 @@ export default {
   content: [
     "./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}",
     "../../packages/ui/src/**/*.{tsx,ts,jsx,js,html,mjs}",
+    "../../packages/email-editor/src/**/*.{tsx,ts,jsx,js,html,mjs}",
   ],
   presets: [sharedConfig],
 } satisfies Config;

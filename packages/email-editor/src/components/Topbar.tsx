@@ -1,6 +1,3 @@
-import {} from "@grapesjs/react";
-import React from "react";
-
 interface ITopbarProps {
   isVisible: boolean;
 }

@@ -1,4 +1,6 @@
-import { Button } from "@repo/ui/components/button";
+import EmailEditor from "@repo/email-editor/Editor";
+import type { Editor } from "grapesjs";
+import { useRef } from "react";
 import type { Route } from "./+types/_index";
 
 export function meta({}: Route.MetaArgs) {
@@ -9,10 +11,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function IndexPage() {
+  const ref = useRef<Editor>(null);
   return (
-    <main>
-      <h1>Hello world</h1>
-      <Button>Press me</Button>
+    <main className="h-screen w-screen">
+      <EmailEditor variables={[]} editorRef={ref} className="h-full w-full" />
     </main>
   );
 }

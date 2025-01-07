@@ -28,6 +28,7 @@
     "baseUrl": "../..",
     "paths": {
       "@repo/ui/*": ["./packages/ui/src/*"],
+      "@repo/email-editor/*": ["./packages/email-editor/src/*"],
       "@web-*": ["./apps/web/src/*"],
       "@docs-*": ["./apps/docs/src/*"]
     }
