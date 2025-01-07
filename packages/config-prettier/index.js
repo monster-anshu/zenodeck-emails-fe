@@ -10,7 +10,7 @@ const config = {
   insertPragma: false,
   jsxSingleQuote: false,
   organizeImportsSkipDestructiveCodeActions: true,
-  plugins: ["prettier-plugin-tailwindcss", "prettier-plugin-organize-imports"],
+  plugins: ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"],
   printWidth: 80,
   quoteProps: "as-needed",
   semi: true,

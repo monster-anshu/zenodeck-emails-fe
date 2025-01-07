@@ -1,4 +1,4 @@
-import GjsEditor, { Canvas } from "@grapesjs/react";
+import GjsEditor, { Canvas, TraitsProvider } from "@grapesjs/react";
 import Spinner from "@repo/ui/components/spinner";
 import { getImageDimensions } from "@repo/ui/lib/file";
 import type { Editor, EditorConfig } from "grapesjs";
@@ -6,6 +6,7 @@ import { RefObject, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Blocks from "./components/Blocks";
 import Topbar from "./components/Topbar";
+import TraitManager from "./components/TraitManager";
 import { grapesjs, grapesjsCss } from "./config";
 import emailEditorPlugin from "./email-editor-plugin";
 import {
@@ -23,16 +24,38 @@ interface IEmailEditorComponentProps {
   onUpload?: (file: File) => Promise<string>;
   intialProjectData?: object;
   className?: string;
-  editorRef: RefObject<Editor | null>;
-  variables: IVariable[];
+  editorRef?: RefObject<Editor | null>;
+  variables?: IVariable[];
 }
+
+const gjsOptions: EditorConfig = {
+  height: "100vh",
+  storageManager: false,
+  undoManager: { trackSelection: false },
+  selectorManager: { componentFirst: true },
+  projectData: {
+    assets: [
+      "https://via.placeholder.com/350x250/78c5d6/fff",
+      "https://via.placeholder.com/350x250/459ba8/fff",
+      "https://via.placeholder.com/350x250/79c267/fff",
+      "https://via.placeholder.com/350x250/c5d647/fff",
+      "https://via.placeholder.com/350x250/f28c33/fff",
+    ],
+    pages: [
+      {
+        name: "Home page",
+        component: `<h1>GrapesJS React Custom UI</h1>`,
+      },
+    ],
+  },
+};
 
 export default function EmailEditorComponent({
   onUpload,
   className,
   editorRef: extRef,
   intialProjectData,
-  variables,
+  variables = [],
 }: IEmailEditorComponentProps) {
   const editorRef = useRef(null as null | Editor);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,9 +74,12 @@ export default function EmailEditorComponent({
     } as Record<string, typeof activeView>;
 
     editorRef.current = editor;
-    extRef.current = editor;
+    if (extRef) {
+      extRef.current = editor;
+    }
 
     editor.on("run", (event) => {
+      console.log(event);
       const active = record[event];
       setIsPreview((curr) => (!curr ? event === activatePreview : curr));
       if (!active) return;
@@ -79,7 +105,7 @@ export default function EmailEditorComponent({
       appendTo: "#custom-style-manager",
     },
     pluginsOpts: {
-      [emailEditorPlugin as any]: {
+      [emailEditorPlugin as never]: {
         variables,
       },
     },
@@ -97,7 +123,7 @@ export default function EmailEditorComponent({
       appendTo: "#custom-page-manager",
     },
     traitManager: {
-      appendTo: "#custom-trait-manager",
+      custom: true,
     },
     assetManager: {
       async uploadFile(ev) {
@@ -132,24 +158,29 @@ export default function EmailEditorComponent({
     <>
       {isLoading ? <Spinner /> : null}
       <GjsEditor
-        grapesjs={grapesjs}
-        grapesjsCss={grapesjsCss}
         onEditor={onEditor}
-        options={editorConfig}
         className={twMerge("grid", className)}
         style={{
-          gridTemplateColumns: "auto 1fr",
+          gridTemplateColumns: "1fr auto",
           gridTemplateRows: "auto 1fr",
           gap: isPreview ? 0 : 4,
         }}
+        grapesjs={grapesjs}
+        grapesjsCss={grapesjsCss}
+        options={editorConfig}
       >
         <Topbar isVisible={!isPreview} />
-        {(!activeView || isPreview) && <div></div>}
+        <div>
+          <Canvas className="overflow-auto bg-white" />
+        </div>
+        {/* {(!activeView || isPreview) && <div></div>} */}
         <div
           className="relative w-72 overflow-auto bg-white"
-          style={{
-            display: !activeView || isPreview ? "none" : "block",
-          }}
+          style={
+            {
+              // display: !activeView || isPreview ? "none" : "block",
+            }
+          }
         >
           <div>
             <Blocks isVisible={activeView === "BLOCKS"} />
@@ -171,17 +202,23 @@ export default function EmailEditorComponent({
                 display: activeView === "LAYERS" ? "block" : "none",
               }}
             ></div>
-            <div
+            {/* <div
               id="custom-trait-manager"
               style={{
                 display: activeView === "TRAITS" ? "block" : "none",
               }}
-            ></div>
+            ></div> */}
+
+            {activeView === "TRAITS" && (
+              <TraitsProvider>
+                {(props) => {
+                  return <TraitManager {...props} />;
+                }}
+              </TraitsProvider>
+            )}
+            <p>okokkok</p>
             <div id="custom-page-manager"></div>
           </div>
-        </div>
-        <div>
-          <Canvas className="overflow-auto bg-white" />
         </div>
       </GjsEditor>
     </>
