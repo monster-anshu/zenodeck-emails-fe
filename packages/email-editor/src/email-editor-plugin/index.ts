@@ -7,10 +7,11 @@ import loadStyles from "./styles";
 import { PluginOptions } from "./types";
 import loadVariableFeature from "./variable";
 
-const plugin: Plugin<PluginOptions> = (
+const emailEditorPlugin: Plugin<PluginOptions> = (
   editor,
   opts: Partial<PluginOptions> = {}
 ) => {
+  console.log("options", opts);
   const config = editor.getConfig();
 
   const options: Required<PluginOptions> = {
@@ -107,4 +108,4 @@ const plugin: Plugin<PluginOptions> = (
   loadVariableFeature(editor, options);
 };
 
-export default plugin;
+export default emailEditorPlugin;

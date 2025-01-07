@@ -57,6 +57,9 @@ const config: Omit<Config, "content"> = {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
       },
+      fontSize: {
+        xxs: "0.625rem", // Equivalent to 10px
+      },
     },
   },
 };

@@ -20,6 +20,7 @@ export default function loadPanels(
   editor: Editor,
   opts: Required<PluginOptions>
 ) {
+  return;
   const { Panels } = editor;
   const { cmdOpenImport, cmdTglImages } = opts;
 

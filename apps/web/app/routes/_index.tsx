@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 export default function IndexPage() {
   const ref = useRef<Editor>(null);
   return (
-    <main className="h-screen w-screen">
+    <main className="h-screen w-screen bg-black/30 p-2">
       <EmailEditor variables={[]} editorRef={ref} className="h-full w-full" />
     </main>
   );

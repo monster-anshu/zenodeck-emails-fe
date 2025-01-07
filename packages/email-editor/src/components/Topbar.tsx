@@ -4,7 +4,7 @@ interface ITopbarProps {
 
 function Topbar({ isVisible }: ITopbarProps) {
   return (
-    <div className="col-span-full">
+    <div className="col-span-full bg-red-300">
       <div
         className="items-center justify-between"
         id="email-editor-topbar"
@@ -14,7 +14,9 @@ function Topbar({ isVisible }: ITopbarProps) {
           border: "none",
           display: isVisible ? "flex" : "none",
         }}
-      ></div>
+      >
+        <div></div>
+      </div>
     </div>
   );
 }
