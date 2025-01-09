@@ -1,4 +1,5 @@
 import { useEditor } from "@grapesjs/react";
+import { ColorPicker } from "@repo/ui/components/color-picker";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/components/radio-group";
@@ -20,7 +21,7 @@ import type {
   PropertyStack,
 } from "grapesjs";
 import * as React from "react";
-import { LuEraser } from "react-icons/lu";
+import { LuArrowDown, LuArrowUp, LuPlus, LuTrash, LuX } from "react-icons/lu";
 
 interface StylePropertyFieldProps extends React.HTMLProps<HTMLDivElement> {
   prop: Property;
@@ -43,7 +44,6 @@ export default function StylePropertyField({
     const { Assets } = editor;
     Assets.open({
       select: (asset, complete) => {
-        console.log({ complete });
         prop.upValue(asset.getSrc(), { partial: !complete });
         complete && Assets.close();
       },
@@ -69,9 +69,16 @@ export default function StylePropertyField({
       {
         const radioProp = prop as PropertyRadio;
         inputToRender = (
-          <RadioGroup value={value} onChange={onChange}>
+          <RadioGroup
+            value={value}
+            onValueChange={handleChange}
+            className="flex flex-wrap"
+          >
             {radioProp.getOptions().map((option) => (
-              <div key={radioProp.getOptionId(option)}>
+              <div
+                key={radioProp.getOptionId(option)}
+                className="flex items-center space-x-2"
+              >
                 <RadioGroupItem
                   value={radioProp.getOptionId(option)}
                   id={radioProp.getOptionId(option)}
@@ -89,14 +96,13 @@ export default function StylePropertyField({
       {
         const selectProp = prop as PropertySelect;
         inputToRender = (
-          <Select>
-            <SelectTrigger value={value} onChange={onChange}>
+          <Select onValueChange={handleChange} value={valueWithDef}>
+            <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {selectProp.getOptions().map((option) => (
                 <SelectItem
-                  className="text-sm"
                   key={selectProp.getOptionId(option)}
                   value={selectProp.getOptionId(option)}
                 >
@@ -111,12 +117,7 @@ export default function StylePropertyField({
     case "color":
       {
         inputToRender = (
-          <Input
-            placeholder={defValue}
-            value={valueString}
-            onChange={onChange}
-            className="text-sm"
-          />
+          <ColorPicker value={valueString} onValueChange={handleChange} />
         );
       }
       break;
@@ -156,7 +157,11 @@ export default function StylePropertyField({
       {
         const compositeProp = prop as PropertyComposite;
         inputToRender = (
-          <div className={cn("flex flex-wrap bg-black/20 p-2")}>
+          <div
+            className={cn(
+              "bg-secondary/60 flex flex-wrap gap-y-2 rounded-lg border py-2"
+            )}
+          >
             {compositeProp.getProperties().map((prop) => (
               <StylePropertyField key={prop.getId()} prop={prop} />
             ))}
@@ -171,29 +176,25 @@ export default function StylePropertyField({
         const isTextShadow = stackProp.getName() === "text-shadow";
         inputToRender = (
           <div
-            className={cn("flex min-h-[54px] flex-col gap-2 bg-black/20 p-2")}
+            className={cn(
+              "bg-secondary/60 flex min-h-[54px] flex-col gap-2 rounded-lg border p-2"
+            )}
           >
             {layers.map((layer) => (
               <div key={layer.getId()}>
-                <div className="flex items-center gap-1 bg-slate-800 px-2 py-1">
-                  {/* <IconButton
-                    size="small"
-                    onClick={() => layer.move(layer.getIndex() - 1)}
-                  >
-                    <Icon size={0.7} path={mdiArrowUpDropCircle} />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => layer.move(layer.getIndex() + 1)}
-                  >
-                    <Icon size={0.7} path={mdiArrowDownDropCircle} />
-                  </IconButton> */}
+                <div className="flex items-center gap-1 px-2 py-1">
+                  <button onClick={() => layer.move(layer.getIndex() - 1)}>
+                    <LuArrowUp />
+                  </button>
+                  <button onClick={() => layer.move(layer.getIndex() + 1)}>
+                    <LuArrowDown />
+                  </button>
                   <button className="flex-grow" onClick={() => layer.select()}>
                     {layer.getLabel()}
                   </button>
                   <div
                     className={cn(
-                      "flex min-h-[17px] min-w-[17px] justify-center bg-white text-sm text-black"
+                      "flex min-h-[17px] min-w-[17px] justify-center text-sm"
                     )}
                     style={layer.getStylePreview({
                       number: { min: -3, max: 3 },
@@ -202,12 +203,12 @@ export default function StylePropertyField({
                   >
                     {isTextShadow && "T"}
                   </div>
-                  {/* <IconButton size="small" onClick={() => layer.remove()}>
-                    <Icon size={0.7} path={mdiDelete} />
-                  </IconButton> */}
+                  <button onClick={() => layer.remove()}>
+                    <LuTrash />
+                  </button>
                 </div>
                 {layer.isSelected() && (
-                  <div className="flex flex-wrap p-2">
+                  <div className="flex flex-wrap gap-y-2 py-2">
                     {stackProp.getProperties().map((prop) => (
                       <StylePropertyField key={prop.getId()} prop={prop} />
                     ))}
@@ -222,26 +223,22 @@ export default function StylePropertyField({
   }
 
   return (
-    <div
-      {...rest}
-      className={cn("mb-3 px-1", prop.isFull() ? "w-full" : "w-1/2")}
-    >
-      <div className={cn("mb-2 flex items-center", canClear && "text-sky-300")}>
+    <div {...rest} className={cn("px-2", prop.isFull() ? "w-full" : "w-1/2")}>
+      <div className={cn("mb-1 flex items-center", canClear && "font-medium")}>
         <div className="flex-grow capitalize">{prop.getLabel()}</div>
         {canClear && (
-          <button onClick={() => prop.clear()}>
-            <LuEraser />
+          <button onClick={() => prop.clear()} aria-label="Clear">
+            <LuX size={14} />
           </button>
         )}
-        {/* {type === "stack" && (
-          <IconButton
-            size="small"
+        {type === "stack" && (
+          <button
             className="!ml-2"
             onClick={() => (prop as PropertyStack).addLayer({}, { at: 0 })}
           >
-            <Icon size={1} path={mdiPlus} />
-          </IconButton>
-        )} */}
+            <LuPlus />
+          </button>
+        )}
       </div>
       {inputToRender}
     </div>

@@ -1,21 +1,13 @@
-import GjsEditor, { Canvas, TraitsProvider, WithEditor } from "@grapesjs/react";
+import GjsEditor, { Canvas, WithEditor } from "@grapesjs/react";
 import Spinner from "@repo/ui/components/spinner";
 import { getImageDimensions } from "@repo/ui/lib/file";
 import type { Editor, EditorConfig } from "grapesjs";
 import { RefObject, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import Blocks from "./components/Blocks";
+import RightBar, { Tab } from "./components/RightBar";
 import Topbar from "./components/Topbar";
-import TraitManager from "./components/TraitManager";
 import { grapesjs, grapesjsCss } from "./config";
 import emailEditorPlugin from "./email-editor-plugin";
-import {
-  activatePreview,
-  openBlocks,
-  openLayers,
-  openStyleManager,
-  openTraits,
-} from "./email-editor-plugin/consts";
 import { IVariable } from "./email-editor-plugin/types";
 import "./style.css";
 import template from "./templates/template.json";
@@ -38,38 +30,33 @@ export default function EmailEditorComponent({
   const editorRef = useRef(null as null | Editor);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [activeView, setActiveView] = useState<
-    "BLOCKS" | "STYLES" | "LAYERS" | "TRAITS" | null
-  >(null);
-  const [isPreview, setIsPreview] = useState(false);
-
   const onEditor = (editor: Editor) => {
-    const record = {
-      [openStyleManager]: "STYLES",
-      [openBlocks]: "BLOCKS",
-      [openLayers]: "LAYERS",
-      [openTraits]: "TRAITS",
-    } as Record<string, typeof activeView>;
-
     editorRef.current = editor;
     if (extRef) {
       extRef.current = editor;
     }
 
-    editor.on("run", (event) => {
-      console.log(event);
-      const active = record[event];
-      setIsPreview((curr) => (!curr ? event === activatePreview : curr));
-      if (!active) return;
-      setActiveView(active);
-    });
+    // const record = {
+    //   [openStyleManager]: "STYLES",
+    //   [openBlocks]: "BLOCKS",
+    //   [openLayers]: "LAYERS",
+    //   [openTraits]: "TRAITS",
+    // } as Record<string, typeof activeView>;
 
-    editor.on("stop", (event) => {
-      const active = record[event];
-      setIsPreview((curr) => (event === activatePreview ? false : curr));
-      if (!active) return;
-      setActiveView((curr) => (curr === active ? null : curr));
-    });
+    // editor.on("run", (event) => {
+    //   console.log(event);
+    //   const active = record[event];
+    //   setIsPreview((curr) => (!curr ? event === activatePreview : curr));
+    //   if (!active) return;
+    //   setActiveView(active);
+    // });
+
+    // editor.on("stop", (event) => {
+    //   const active = record[event];
+    //   setIsPreview((curr) => (event === activatePreview ? false : curr));
+    //   if (!active) return;
+    //   setActiveView((curr) => (curr === active ? null : curr));
+    // });
   };
 
   const editorConfig: EditorConfig = {
@@ -79,9 +66,6 @@ export default function EmailEditorComponent({
     fromElement: true,
     plugins: [emailEditorPlugin],
     projectData: intialProjectData || template,
-    styleManager: {
-      appendTo: "#custom-style-manager",
-    },
     pluginsOpts: {
       [emailEditorPlugin as never]: {
         variables,
@@ -93,6 +77,9 @@ export default function EmailEditorComponent({
     selectorManager: {
       appendTo: "#custom-selector-manager",
       componentFirst: true,
+    },
+    styleManager: {
+      appendTo: "#custom-style-manager",
     },
     layerManager: {
       appendTo: "#custom-layer-manager",
@@ -141,64 +128,19 @@ export default function EmailEditorComponent({
         style={{
           gridTemplateColumns: "1fr auto",
           gridTemplateRows: "auto 1fr",
-          gap: isPreview ? 0 : 4,
+          // gap: isPreview ? 0 : 4,
+          gap: 4,
         }}
         grapesjs={grapesjs}
         grapesjsCss={grapesjsCss}
         options={editorConfig}
       >
         <WithEditor>
-          <Topbar isVisible={!isPreview} />
+          <Topbar isVisible />
         </WithEditor>
+        <RightBar />
         <div>
-          <Canvas className="overflow-auto bg-white" />
-        </div>
-        {/* {(!activeView || isPreview) && <div></div>} */}
-        <div
-          className="relative w-72 overflow-auto bg-white"
-          style={
-            {
-              // display: !activeView || isPreview ? "none" : "block",
-            }
-          }
-        >
-          <div>
-            <Blocks isVisible={activeView === "BLOCKS"} />
-            <div
-              id="custom-selector-manager"
-              style={{
-                display: activeView === "STYLES" ? "block" : "none",
-              }}
-            ></div>
-            <div
-              id="custom-style-manager"
-              style={{
-                display: activeView === "STYLES" ? "block" : "none",
-              }}
-            ></div>
-            <div
-              id="custom-layer-manager"
-              style={{
-                display: activeView === "LAYERS" ? "block" : "none",
-              }}
-            ></div>
-            {/* <div
-              id="custom-trait-manager"
-              style={{
-                display: activeView === "TRAITS" ? "block" : "none",
-              }}
-            ></div> */}
-
-            {activeView === "TRAITS" && (
-              <TraitsProvider>
-                {(props) => {
-                  return <TraitManager {...props} />;
-                }}
-              </TraitsProvider>
-            )}
-            <p>okokkok</p>
-            <div id="custom-page-manager"></div>
-          </div>
+          <Canvas className="overflow-auto rounded bg-white" />
         </div>
       </GjsEditor>
     </>
