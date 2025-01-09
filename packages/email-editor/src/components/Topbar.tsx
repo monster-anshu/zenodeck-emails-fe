@@ -131,7 +131,7 @@ function Topbar({ isVisible }: ITopbarProps) {
   // }
 
   return (
-    <div className="col-span-full bg-red-300 px-2 py-2">
+    <div className="bg-background col-span-1 rounded px-2 py-2">
       <div className="ml-auto w-fit space-x-1">
         {cmdButtons.map((item) => {
           const { icon, id, options, disabled } = item;
