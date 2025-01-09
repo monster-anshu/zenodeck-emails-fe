@@ -143,7 +143,7 @@ const RightBar: FC<IRightBarProps> = () => {
     <>
       {isPreview && <div className="row-span-2"></div>}
       <div
-        className="bg-background relative row-span-2 w-72 overflow-auto rounded"
+        className="bg-background relative row-span-2 overflow-auto rounded"
         style={{
           display: isPreview || !editor ? "none" : "block",
         }}
@@ -155,9 +155,14 @@ const RightBar: FC<IRightBarProps> = () => {
             if (!tab) return;
             handleTabClick(tab);
           }}
-          className="bg-background sticky top-0 z-50 px-2 py-2"
+          className="bg-background sticky top-0 z-50 mt-2 px-2"
         >
-          <TabsList className="w-full border">
+          <TabsList
+            className="grid w-full border"
+            style={{
+              gridTemplateColumns: `repeat(${tabs.length}, 1fr)`,
+            }}
+          >
             {tabs.map((tab) => {
               // const isActive = tab.active === activeView;
               return (
@@ -166,16 +171,14 @@ const RightBar: FC<IRightBarProps> = () => {
                   aria-label={tab.label}
                   title={tab.label}
                   value={tab.active}
-                  className="flex-grow text-xl"
+                  className="text-sm"
                 >
-                  {tab.icon}
+                  {tab.label}
                 </TabsTrigger>
               );
             })}
           </TabsList>
         </Tabs>
-        {/* <div className="bg-background sticky top-0 z-10 space-x-1 px-1 py-2">
-        </div> */}
 
         <div>
           {activeView === "BLOCKS" && <Blocks isVisible={true} />}
