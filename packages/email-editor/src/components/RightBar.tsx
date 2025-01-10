@@ -1,7 +1,7 @@
 import { TraitsProvider, useEditorMaybe } from "@grapesjs/react";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { normalize } from "@repo/ui/lib/normalize";
-import { EventHandler } from "grapesjs";
+import type { EventHandler } from "grapesjs";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { LuBlocks, LuLayers, LuPencil, LuSettings2 } from "react-icons/lu";
 import {
