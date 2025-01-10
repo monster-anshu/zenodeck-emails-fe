@@ -5,7 +5,7 @@ export default function TraitManager({
   traits,
 }: Omit<TraitsResultProps, "Container">) {
   return (
-    <div className="mt-2 p-1 text-left">
+    <div className="mt-2 px-2 text-left">
       {!traits.length ? (
         <div>No properties available</div>
       ) : (

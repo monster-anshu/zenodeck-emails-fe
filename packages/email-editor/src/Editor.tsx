@@ -4,10 +4,11 @@ import { getImageDimensions } from "@repo/ui/lib/file";
 import type { Editor, EditorConfig } from "grapesjs";
 import { RefObject, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import RightBar, { Tab } from "./components/RightBar";
+import RightBar from "./components/RightBar";
 import Topbar from "./components/Topbar";
 import { grapesjs, grapesjsCss } from "./config";
 import emailEditorPlugin from "./email-editor-plugin";
+import { activatePreview } from "./email-editor-plugin/consts";
 import { IVariable } from "./email-editor-plugin/types";
 import "./style.css";
 import template from "./templates/template.json";
@@ -29,6 +30,7 @@ export default function EmailEditorComponent({
 }: IEmailEditorComponentProps) {
   const editorRef = useRef(null as null | Editor);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
 
   const onEditor = (editor: Editor) => {
     editorRef.current = editor;
@@ -43,20 +45,13 @@ export default function EmailEditorComponent({
     //   [openTraits]: "TRAITS",
     // } as Record<string, typeof activeView>;
 
-    // editor.on("run", (event) => {
-    //   console.log(event);
-    //   const active = record[event];
-    //   setIsPreview((curr) => (!curr ? event === activatePreview : curr));
-    //   if (!active) return;
-    //   setActiveView(active);
-    // });
+    editor.on("run", (event) => {
+      setIsPreview((curr) => (!curr ? event === activatePreview : curr));
+    });
 
-    // editor.on("stop", (event) => {
-    //   const active = record[event];
-    //   setIsPreview((curr) => (event === activatePreview ? false : curr));
-    //   if (!active) return;
-    //   setActiveView((curr) => (curr === active ? null : curr));
-    // });
+    editor.on("stop", (event) => {
+      setIsPreview((curr) => (event === activatePreview ? false : curr));
+    });
   };
 
   const editorConfig: EditorConfig = {
@@ -128,17 +123,16 @@ export default function EmailEditorComponent({
         style={{
           gridTemplateColumns: "1fr auto",
           gridTemplateRows: "auto 1fr",
-          // gap: isPreview ? 0 : 4,
-          gap: 4,
+          gap: isPreview ? 0 : 4,
         }}
         grapesjs={grapesjs}
         grapesjsCss={grapesjsCss}
         options={editorConfig}
       >
         <WithEditor>
-          <Topbar isVisible />
+          <Topbar isPreview={isPreview} />
         </WithEditor>
-        <RightBar />
+        <RightBar isPreview={isPreview} />
         <div>
           <Canvas className="overflow-auto rounded bg-white" />
         </div>

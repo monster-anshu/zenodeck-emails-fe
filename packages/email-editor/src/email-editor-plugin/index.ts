@@ -2,7 +2,6 @@ import type { Plugin } from "grapesjs";
 import loadBlocks from "./blocks";
 import loadCommands from "./commands";
 import { variableBlock } from "./consts";
-import loadPanels from "./panels";
 import loadStyles from "./styles";
 import { PluginOptions } from "./types";
 import loadVariableFeature from "./variable";
@@ -11,7 +10,6 @@ const emailEditorPlugin: Plugin<PluginOptions> = (
   editor,
   opts: Partial<PluginOptions> = {}
 ) => {
-  console.log("options", opts);
   const config = editor.getConfig();
 
   const options: Required<PluginOptions> = {
@@ -101,7 +99,6 @@ const emailEditorPlugin: Plugin<PluginOptions> = (
 
   loadCommands(editor, options);
   loadBlocks(editor, options);
-  loadPanels(editor, options);
   loadStyles(editor, options);
   loadVariableFeature(editor, options);
 };

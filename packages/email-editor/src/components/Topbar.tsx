@@ -25,7 +25,7 @@ import {
 } from "../email-editor-plugin/consts";
 
 interface ITopbarProps {
-  isVisible: boolean;
+  isPreview: boolean;
 }
 
 const iconStyle = 'style="display: block; max-width: 22px"';
@@ -68,7 +68,7 @@ interface CommandButton {
   disabled?: () => boolean;
 }
 
-function Topbar({ isVisible }: ITopbarProps) {
+function Topbar({ isPreview }: ITopbarProps) {
   const editor = useEditor();
   const { Commands } = editor;
   const [, setUpdateCounter] = useState(0);
@@ -126,9 +126,9 @@ function Topbar({ isVisible }: ITopbarProps) {
     };
   }, []);
 
-  // if (!isVisible) {
-  //   return null;
-  // }
+  if (isPreview) {
+    return <div className="col-span-1"></div>;
+  }
 
   return (
     <div className="bg-background col-span-1 rounded px-2 py-2">

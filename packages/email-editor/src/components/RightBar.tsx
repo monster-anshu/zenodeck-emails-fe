@@ -23,11 +23,11 @@ import {
   openTraits,
 } from "../email-editor-plugin/consts";
 import Blocks from "./Blocks";
-import SelectorManager from "./SelectorManager";
-import StyleManager from "./StyleManager";
 import TraitManager from "./TraitManager";
 
-type IRightBarProps = {};
+type IRightBarProps = {
+  isPreview: boolean;
+};
 
 export type Tab = "BLOCKS" | "STYLES" | "LAYERS" | "TRAITS";
 type TabItem = {
@@ -72,7 +72,7 @@ const tabs: TabItem[] = [
 
 const tabRecord = normalize(tabs, "active");
 
-const RightBar: FC<IRightBarProps> = () => {
+const RightBar: FC<IRightBarProps> = ({}) => {
   const editor = useEditorMaybe();
   const [activeView, setActiveView] = useState<Tab>("BLOCKS");
   const lastActiveCommand = useRef(null as null | string);
@@ -143,7 +143,7 @@ const RightBar: FC<IRightBarProps> = () => {
     <>
       {isPreview && <div className="row-span-2"></div>}
       <div
-        className="bg-background relative row-span-2 overflow-auto rounded"
+        className="bg-background relative row-span-2 w-80 overflow-auto rounded"
         style={{
           display: isPreview || !editor ? "none" : "block",
         }}
@@ -155,10 +155,10 @@ const RightBar: FC<IRightBarProps> = () => {
             if (!tab) return;
             handleTabClick(tab);
           }}
-          className="bg-background sticky top-0 z-50 mt-2 px-2"
+          className="bg-background sticky top-0 z-50 my-2 px-2"
         >
           <TabsList
-            className="grid w-full border"
+            className="grid w-full"
             style={{
               gridTemplateColumns: `repeat(${tabs.length}, 1fr)`,
             }}

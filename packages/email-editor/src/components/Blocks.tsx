@@ -19,7 +19,7 @@ export default function Blocks({ isVisible }: IBlocksProps) {
             {blocks.map((block, i) => {
               return (
                 <div
-                  className="hover:bg-primary/20 rounded-lg border p-2"
+                  className="hover:bg-secondary rounded-lg border p-2"
                   key={block.id || i}
                   onDragStart={(ev) => dragStart(block, ev.nativeEvent)}
                   onDragEnd={() => dragStop(false)}
