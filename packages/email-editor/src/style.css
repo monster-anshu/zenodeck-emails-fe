@@ -6,18 +6,18 @@
   display: none !important;
 } */
 
-:root {
+html:not(.dark):root {
   --gjs-primary-color: #fff !important;
   --gjs-main-color: #fff !important;
   --gjs-secondary-color: #363942 !important;
   --gjs-main-light-color: #eeeeee !important;
-  --gjs-quaternary-color: #6f3fbe !important;
+  --gjs-quaternary-color: #363942 !important;
   --gjs-tertiary-color: #fff !important;
   --gjs-font-color: #363942 !important;
   --gjs-arrow-color: #363942 !important;
   --gjs-secondary-dark-color: hsl(240 4.8% 95.9%) !important;
   --gjs-main-dark-color: hsl(240 4.8% 95.9%) !important;
-  --gjs-dark-text-shadow: hsl(60, 81.82%, 43.14%) !important;
+  --gjs-dark-text-shadow: hsl(214.3 31.8% 91.4%) !important;
   --gjs-main-light-color: rgb(234, 234, 234) !important;
   --gjs-soft-light-color: rgb(200, 200, 200) !important;
 }
@@ -31,6 +31,10 @@
 .gjs-clm-select select,
 .gjs-clm-field select {
   color: var(--gjs-font-color) !important;
+}
+
+.gjs-sm-icon {
+  color: var(--gjs-font-color);
 }
 
 .gjs-field {

@@ -8,6 +8,7 @@ import {
 } from "react-router";
 
 import sharedCss from "@repo/ui/style.css?url";
+import { useEffect, useRef } from "react";
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 
@@ -27,8 +28,20 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLHtmlElement>(null);
+
+  useEffect(() => {
+    (window as any).toggleTheme = () => {
+      if (ref.current?.classList.contains("dark")) {
+        ref.current.classList.remove("dark");
+      } else {
+        ref.current?.classList.add("dark");
+      }
+    };
+  }, []);
+
   return (
-    <html lang="en" className="dar">
+    <html lang="en" ref={ref}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

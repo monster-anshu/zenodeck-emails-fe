@@ -1,5 +1,6 @@
 import type { Editor } from "grapesjs";
 import juice from "juice";
+import { openExport } from "./consts";
 import { PluginOptions } from "./types";
 
 export default (editor: Editor, opts: Required<PluginOptions>) => {
@@ -13,7 +14,7 @@ export default (editor: Editor, opts: Required<PluginOptions>) => {
     },
   });
 
-  cmdm.add("export-template", {
+  cmdm.add(openExport, {
     containerEl: null as HTMLDivElement | null,
     codeEditorHtml: null as HTMLDivElement | null,
 
@@ -82,8 +83,12 @@ export default (editor: Editor, opts: Required<PluginOptions>) => {
         const finalTemplate = opts.inlineCss
           ? juice(tmpl, opts.juiceOpts)
           : tmpl;
-        codeEditorHtml.setContent(finalTemplate);
-        codeEditorHtml.editor.refresh();
+
+        // need this call back to render correctly in the shandcn modal
+        setTimeout(() => {
+          codeEditorHtml.setContent(finalTemplate);
+          codeEditorHtml.editor.refresh();
+        });
       }
     },
   });

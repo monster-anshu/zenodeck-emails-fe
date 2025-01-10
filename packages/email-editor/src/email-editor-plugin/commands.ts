@@ -1,10 +1,5 @@
 import type { Editor } from "grapesjs";
-import {
-  cmdClear,
-  cmdDeviceDesktop,
-  cmdDeviceMobile,
-  cmdDeviceTablet,
-} from "./consts";
+import { cmdClear } from "./consts";
 import openExportCommand from "./openExportCommand";
 import openImportCommand from "./openImportCommand";
 import tglImagesCommand from "./toggleImagesCommand";
@@ -17,21 +12,6 @@ export default (editor: Editor, opts: Required<PluginOptions>) => {
   openImportCommand(editor, opts);
   openExportCommand(editor, opts);
   tglImagesCommand(editor, opts);
-
-  Commands.add(cmdDeviceDesktop, {
-    run: (ed) => ed.setDevice("Desktop"),
-    stop: () => {},
-  });
-
-  Commands.add(cmdDeviceTablet, {
-    run: (ed) => ed.setDevice("Tablet"),
-    stop: () => {},
-  });
-
-  Commands.add(cmdDeviceMobile, {
-    run: (ed) => ed.setDevice("Mobile portrait"),
-    stop: () => {},
-  });
 
   Commands.add(cmdClear, {
     run: (ed) => {

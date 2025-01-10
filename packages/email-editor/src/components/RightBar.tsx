@@ -1,16 +1,5 @@
-import {
-  SelectorsProvider,
-  StylesProvider,
-  TraitsProvider,
-  useEditorMaybe,
-} from "@grapesjs/react";
-import { Button } from "@repo/ui/components/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@repo/ui/components/tabs";
+import { TraitsProvider, useEditorMaybe } from "@grapesjs/react";
+import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import { normalize } from "@repo/ui/lib/normalize";
 import { EventHandler } from "grapesjs";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
@@ -143,7 +132,7 @@ const RightBar: FC<IRightBarProps> = ({}) => {
     <>
       {isPreview && <div className="row-span-2"></div>}
       <div
-        className="bg-background relative row-span-2 w-80 overflow-auto rounded"
+        className="bg-muted relative row-span-2 w-80 overflow-auto border"
         style={{
           display: isPreview || !editor ? "none" : "block",
         }}
@@ -155,7 +144,7 @@ const RightBar: FC<IRightBarProps> = ({}) => {
             if (!tab) return;
             handleTabClick(tab);
           }}
-          className="bg-background sticky top-0 z-50 my-2 px-2"
+          className="bg-muted sticky top-0 z-50 border-b px-2 py-2"
         >
           <TabsList
             className="grid w-full"
@@ -206,7 +195,6 @@ const RightBar: FC<IRightBarProps> = ({}) => {
           )}
           <div
             id="custom-layer-manager"
-            className="bg-gray-500"
             style={{
               display: activeView === "LAYERS" ? "block" : "none",
             }}

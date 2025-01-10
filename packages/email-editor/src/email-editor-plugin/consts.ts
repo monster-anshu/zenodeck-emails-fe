@@ -1,7 +1,3 @@
-export const cmdDeviceDesktop = "set-device-desktop";
-export const cmdDeviceTablet = "set-device-tablet";
-export const cmdDeviceMobile = "set-device-mobile";
-
 export const activateOutline = "core:component-outline";
 export const activateFullscreen = "core:fullscreen";
 export const activatePreview = "core:preview";

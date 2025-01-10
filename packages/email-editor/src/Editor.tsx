@@ -4,6 +4,7 @@ import { getImageDimensions } from "@repo/ui/lib/file";
 import type { Editor, EditorConfig } from "grapesjs";
 import { RefObject, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import Modal from "./components/Modal";
 import RightBar from "./components/RightBar";
 import Topbar from "./components/Topbar";
 import { grapesjs, grapesjsCss } from "./config";
@@ -123,7 +124,7 @@ export default function EmailEditorComponent({
         style={{
           gridTemplateColumns: "1fr auto",
           gridTemplateRows: "auto 1fr",
-          gap: isPreview ? 0 : 4,
+          gap: isPreview ? 0 : 0,
         }}
         grapesjs={grapesjs}
         grapesjsCss={grapesjsCss}
@@ -134,8 +135,9 @@ export default function EmailEditorComponent({
         </WithEditor>
         <RightBar isPreview={isPreview} />
         <div>
-          <Canvas className="overflow-auto rounded bg-white" />
+          <Canvas className="bg-background overflow-auto border" />
         </div>
+        <Modal />
       </GjsEditor>
     </>
   );
