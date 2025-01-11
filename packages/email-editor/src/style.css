@@ -22,6 +22,10 @@ html:not(.dark):root {
   --gjs-soft-light-color: rgb(200, 200, 200) !important;
 }
 
+:root {
+  --canvas-primary-color: hsl(240 5.9% 10%);
+}
+
 .gjs-input-holder,
 .gjs-field-arrows,
 .gjs-sm-field input,
@@ -66,7 +70,7 @@ html:not(.dark):root {
 /* selector manager */
 
 .gjs-clm-tags {
-  @apply rounded;
+  @apply !rounded-none;
 }
 
 .gjs-clm-label-sel {
@@ -85,6 +89,7 @@ html:not(.dark):root {
   font-weight: 500;
   font-size: 14px;
 }
+
 /* radio group */
 .gjs-field.gjs-field-radio {
   @apply !rounded-md;
@@ -128,4 +133,23 @@ html:not(.dark):root {
 /* layers */
 .gjs-layer-title.gjs-layer-title {
   font-weight: 500;
+}
+
+/* button */
+.gjs-btn-prim {
+  @apply !bg-primary !text-primary-foreground !border-border !rounded !border !px-3 !text-sm;
+}
+
+.gjs-btn-import {
+  @apply !ml-auto;
+}
+
+/* canvas */
+.gjs-toolbar.gjs-toolbar {
+  border-radius: 6px;
+  flex: content;
+}
+
+.gjs-toolbar.gjs-toolbar {
+  background-color: var(--canvas-primary-color) !important;
 }

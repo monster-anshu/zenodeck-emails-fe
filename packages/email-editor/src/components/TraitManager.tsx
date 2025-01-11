@@ -7,7 +7,7 @@ export default function TraitManager({
   return (
     <div className="mt-2 px-2 text-left">
       {!traits.length ? (
-        <div>No properties available</div>
+        <div className="text-sm"> No properties available</div>
       ) : (
         traits.map((trait) => (
           <TraitPropertyField key={trait.getId()} trait={trait} />

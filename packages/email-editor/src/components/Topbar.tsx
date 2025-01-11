@@ -15,7 +15,7 @@ import {
   LuFileDown,
   LuFullscreen,
   LuRedo2,
-  LuScan,
+  LuSquareDashedMousePointer,
   LuUndo2,
 } from "react-icons/lu";
 import {
@@ -46,7 +46,7 @@ function Topbar({ isPreview }: ITopbarProps) {
   const cmdButtons: CommandButton[] = [
     {
       id: activateOutline,
-      icon: <LuScan />,
+      icon: <LuSquareDashedMousePointer />,
     },
     {
       id: activatePreview,

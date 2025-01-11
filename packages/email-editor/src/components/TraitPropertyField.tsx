@@ -58,8 +58,8 @@ export default function TraitPropertyField({
     case "select":
       {
         inputToRender = (
-          <Select>
-            <SelectTrigger value={value} onChange={onChange}>
+          <Select value={value} onValueChange={handleChange}>
+            <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -6,10 +7,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import type { Route } from "./+types/root";
 
 import sharedCss from "@repo/ui/style.css?url";
-import { useEffect, useRef } from "react";
-import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
 
 export const links: Route.LinksFunction = () => [
