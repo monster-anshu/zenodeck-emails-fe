@@ -49,6 +49,7 @@ const Sidebar: FC<ISidebarProps> = () => {
               to={link.link}
               className="hover:bg-secondary text-foreground/80 hover:text-foreground/100 block rounded px-2 py-1.5"
               key={link.link}
+              viewTransition
             >
               {link.label}
             </Link>
