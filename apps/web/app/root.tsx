@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 
 import sharedCss from "@repo/ui/style.css?url";
 import stylesheet from "./app.css?url";
+import Sidebar from "./components/Sidebar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -27,21 +28,27 @@ export const links: Route.LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  const ref = useRef<HTMLHtmlElement>(null);
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Zenodeck Campaign" }];
+}
 
+export function Layout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    const html = document.querySelector("html");
+    if (!html) {
+      return;
+    }
     (window as any).toggleTheme = () => {
-      if (ref.current?.classList.contains("dark")) {
-        ref.current.classList.remove("dark");
+      if (html.classList.contains("dark")) {
+        html.classList.remove("dark");
       } else {
-        ref.current?.classList.add("dark");
+        html.classList.add("dark");
       }
     };
   }, []);
 
   return (
-    <html lang="en" ref={ref}>
+    <html lang="en" className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -49,7 +56,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <div
+          className="grid h-screen"
+          style={{
+            gridTemplateColumns: "250px 1fr",
+          }}
+        >
+          <Sidebar />
+          {children}
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
