@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 export default function EditorPage() {
   const ref = useRef<Editor>(null);
   return (
-    <main className="h-screen w-screen">
+    <main className="flex-1">
       <EmailEditor variables={[]} editorRef={ref} className="h-full w-full" />
     </main>
   );

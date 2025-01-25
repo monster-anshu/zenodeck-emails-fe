@@ -56,12 +56,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <div
-          className="grid h-screen"
-          style={{
-            gridTemplateColumns: "250px 1fr",
-          }}
-        >
+        <div className="flex h-screen">
           <Sidebar />
           {children}
         </div>
@@ -93,7 +88,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="container mx-auto p-4 pt-16">
+    <main className="container mx-auto flex-1 p-4 pt-16">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (

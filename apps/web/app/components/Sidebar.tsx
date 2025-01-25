@@ -1,13 +1,19 @@
 import React, { FC } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import Logo from "./Logo";
 
 type ISidebarProps = {};
 
-const linkes = [
+export const linkes = [
   {
     label: "Dashboard",
     link: "/",
+    exact: true,
+  },
+  {
+    label: "Editor",
+    link: "/editor",
+    hideSidebar: true,
   },
   {
     label: "Credentials",
@@ -20,8 +26,21 @@ const linkes = [
 ];
 
 const Sidebar: FC<ISidebarProps> = () => {
+  const location = useLocation();
+
+  const selectedLink = linkes.find((link) =>
+    link.exact
+      ? location.pathname === link.link
+      : location.pathname.startsWith(link.link)
+  );
+
   return (
-    <aside className="border-r px-4 py-5">
+    <aside
+      className="w-60 border-r px-4 py-5"
+      style={{
+        display: selectedLink?.hideSidebar ? "none" : "block",
+      }}
+    >
       <Logo className="mb-8" />
       <nav className="space-y-1">
         {linkes.map((link) => {
