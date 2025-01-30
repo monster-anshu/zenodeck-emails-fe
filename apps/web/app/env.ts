@@ -1,2 +1,1 @@
-export const USER_SERVICE_DOMAIN = import.meta.env
-  .VITE_USER_SERVICE_DOMAIN as string;
+export const USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL as string;
