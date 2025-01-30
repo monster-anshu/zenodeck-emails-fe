@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { agentInfoQueryOptions } from "@web-queries/agent.query";
 import type { Route } from "./+types/_index";
 
 export function meta({}: Route.MetaArgs) {
@@ -5,5 +7,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function IndexPage() {
-  return <main className="">main</main>;
+  const { data } = useQuery(agentInfoQueryOptions);
+  return <main className="">Name : {data?.agentInfo?.firstName}</main>;
 }
