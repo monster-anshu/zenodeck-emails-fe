@@ -10,8 +10,9 @@ import {
 import type { Route } from "./+types/root";
 
 import sharedCss from "@repo/ui/style.css?url";
+import Sidebar from "@web-components/Sidebar";
+import ReactQueryProvider from "@web-providers/react-query";
 import stylesheet from "./app.css?url";
-import Sidebar from "./components/Sidebar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -56,10 +57,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="flex h-screen">
-          <Sidebar />
-          {children}
-        </div>
+        <ReactQueryProvider>
+          <div className="flex h-screen">
+            <Sidebar />
+            {children}
+          </div>
+        </ReactQueryProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

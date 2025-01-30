@@ -29,7 +29,7 @@
     "paths": {
       "@repo/ui/*": ["./packages/ui/src/*"],
       "@repo/email-editor/*": ["./packages/email-editor/src/*"],
-      "@web-*": ["./apps/web/src/*"],
+      "@web-*": ["./apps/web/app/*"],
       "@docs-*": ["./apps/docs/src/*"]
     }
   }
