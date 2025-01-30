@@ -1,4 +1,4 @@
-import { USER_SERVICE_DOMAIN } from "@web-env";
+import { USER_SERVICE_URL } from "@web-env";
 import { AxiosError, AxiosResponse } from "axios";
 import { ApiResponse } from "./client";
 
@@ -26,7 +26,7 @@ export const commonErrorAuthInterceptor = async (
   }
 
   if (status === 401) {
-    const url = new URL(USER_SERVICE_DOMAIN);
+    const url = new URL(USER_SERVICE_URL);
     url.searchParams.set("productId", "CAMPAIGN");
     url.searchParams.set("location", encodeURIComponent(window.location.href));
     window.location.href = url.toString();
