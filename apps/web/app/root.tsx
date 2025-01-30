@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 
 import sharedCss from "@repo/ui/style.css?url";
 import Sidebar from "@web-components/Sidebar";
+import AuthProvider from "@web-providers/auth.provider";
 import ReactQueryProvider from "@web-providers/react-query";
 import stylesheet from "./app.css?url";
 
@@ -58,10 +59,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ReactQueryProvider>
-          <div className="flex h-screen">
-            <Sidebar />
-            {children}
-          </div>
+          <AuthProvider>
+            <div className="flex h-screen">
+              <Sidebar />
+              {children}
+            </div>
+          </AuthProvider>
         </ReactQueryProvider>
         <ScrollRestoration />
         <Scripts />
