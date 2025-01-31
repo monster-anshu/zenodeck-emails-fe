@@ -1,5 +1,5 @@
-import { Button } from "@repo/ui/components/button";
 import { useQuery } from "@tanstack/react-query";
+import AddCredentialButton from "@web-components/credential/AddCredentialButton";
 import { credentialQueryOptions } from "@web-queries/credential.query";
 import React, { FC } from "react";
 import Header from "../components/Header";
@@ -12,7 +12,7 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
     <main className="flex-1 px-6 py-4">
       <Header
         location={[{ label: "Credential", link: "/credential" }]}
-        rightSection={<Button>+ Add</Button>}
+        rightSection={<AddCredentialButton />}
       />
       <div>
         {data?.credentials.map((credential) => {
