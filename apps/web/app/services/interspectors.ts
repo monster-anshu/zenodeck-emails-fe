@@ -28,7 +28,7 @@ export const commonErrorAuthInterceptor = async (
   if (status === 401) {
     const url = new URL(USER_SERVICE_URL + "/login");
     url.searchParams.set("productId", "CAMPAIGN");
-    url.searchParams.set("location", encodeURIComponent(window.location.href));
+    url.searchParams.set("redirect", encodeURIComponent(window.location.href));
     window.location.href = url.toString();
     await new Promise(() => {});
     return;
