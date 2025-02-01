@@ -23,6 +23,11 @@ const FormComponent = <Element extends FormElement<z.ZodAny>>({
   element: Element;
 }) => {
   const form = useFormContext();
+
+  if (item.hide) {
+    return null;
+  }
+
   if (
     item.type === "email" ||
     item.type === "password" ||
@@ -88,7 +93,7 @@ export { FormComponent };
 // types
 import type { ReactNode } from "react";
 
-type Option = {
+export type Option = {
   label: ReactNode;
   value: string;
 };
@@ -99,6 +104,7 @@ export type FormElement<T extends ZodSchema> = Record<string, unknown> & {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  hide?: boolean;
 } & (
     | { type: "text" | "email" | "password" }
     | { type: "select"; options: Option[] }
