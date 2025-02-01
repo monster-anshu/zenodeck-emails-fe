@@ -6,26 +6,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
-import { cn } from "@repo/ui/lib/utils";
+import { Form } from "@repo/ui/components/form";
+import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
 import { Credential } from "@web-services/credential.service";
-import { FormElement } from "@web-types";
-import React, { FC } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineEmail } from "react-icons/md";
 import { SiResend } from "react-icons/si";
@@ -75,72 +59,9 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
             className="grid grid-cols-2 gap-3"
           >
             {formElements.map((item) => {
-              if (
-                item.type === "email" ||
-                item.type === "password" ||
-                item.type === "text"
-              ) {
-                return (
-                  <FormField
-                    key={item.name}
-                    control={form.control}
-                    name={item.name}
-                    render={({ field }) => (
-                      <FormItem className={cn("col-span-2", item.className)}>
-                        <FormLabel>{item.label}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={item.placeholder}
-                            type={item.type}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                );
-              }
-
-              if (item.type === "select") {
-                return (
-                  <FormField
-                    control={form.control}
-                    name={item.name}
-                    key={item.name}
-                    render={({ field }) => (
-                      <FormItem className={cn("col-span-2", item.className)}>
-                        <FormLabel>{item.label}</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={item.placeholder} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {item.options.map((option) => {
-                              return (
-                                <SelectItem
-                                  value={option.value}
-                                  key={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                );
-              }
-              return null;
+              return <FormComponent element={item} key={item.name} />;
             })}
+
             <Button className="col-span-2" type="submit">
               Submit
             </Button>

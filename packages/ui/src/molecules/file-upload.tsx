@@ -1,9 +1,9 @@
 import React, { useImperativeHandle, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import ReactPortal from "@repo/ui/components/react-portal";
 import Spinner from "@repo/ui/components/spinner";
 import { checkAudioVideo, getImageDimensions } from "@repo/ui/lib/file";
+import ReactPortal from "./react-portal.tsx";
 
 export type IFile = {
   file?: File;
