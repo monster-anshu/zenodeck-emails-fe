@@ -3,7 +3,6 @@ import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/dialog";
@@ -52,12 +51,26 @@ const schema = z.object({
 
 const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
   onClose,
+  credential: initialValue,
 }) => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      name: "",
-      type: "RESEND_API",
+    defaultValues: async () => {
+      const privateKeys = Object.entries(
+        initialValue?.privateKeys || {}
+      ).reduce(
+        (acc, [key, value]) => {
+          acc["private_" + key] = value + "";
+          return acc;
+        },
+        {} as Record<string, string>
+      );
+      console.log(privateKeys);
+      return {
+        ...privateKeys,
+        name: initialValue?.name || "",
+        type: (initialValue?.type as never) || "RESEND_API",
+      };
     },
   });
 
@@ -72,19 +85,20 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
         },
         {} as Record<string, unknown>
       );
-      const credential = await CredentialService.add({
+      const { credential } = await CredentialService.addEdit({
         name: values.name,
         privateKeys: privateKeys,
         type: values.type,
+        id: initialValue?._id,
       });
       return credential;
     },
-    onSuccess(data) {
+    onSuccess(credential) {
       queryClient.setQueryData(credentialQueryOptions.queryKey, (curr) => {
         if (!curr) return;
         return {
           ...curr,
-          credentials: curr.credentials.concat(data.credential),
+          credentials: curr.credentials.concat(credential),
         };
       });
       onClose();
@@ -97,7 +111,7 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
     {
       name: "name",
       label: "Name",
-      placeholder: "Super secret",
+      placeholder: "My app",
       type: "text",
     },
     {
@@ -128,6 +142,7 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
       type: "text",
       className: "col-span-1",
       hide: values.type !== "SMTP",
+      regex: /^\d*$/,
     },
     {
       name: "private_username",
@@ -151,11 +166,10 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Add credential</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit as never)}
@@ -174,7 +188,6 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
           </form>
         </Form>
       </DialogContent>
-      <DialogFooter></DialogFooter>
     </Dialog>
   );
 };

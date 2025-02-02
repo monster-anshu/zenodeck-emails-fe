@@ -46,6 +46,13 @@ const FormComponent = <Element extends FormElement<z.ZodAny>>({
                 type={item.type}
                 {...field}
                 value={field.value || ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (item.regex && !item.regex.test(value)) {
+                    return;
+                  }
+                  field.onChange(e);
+                }}
               />
             </FormControl>
             <FormMessage />
@@ -107,7 +114,7 @@ export type FormElement<T extends ZodSchema> = Record<string, unknown> & {
   className?: string;
   hide?: boolean;
 } & (
-    | { type: "text" | "email" | "password" }
+    | { type: "text" | "email" | "password"; regex?: RegExp }
     | { type: "select"; options: Option[] }
     | { type: "file"; module?: string }
   );

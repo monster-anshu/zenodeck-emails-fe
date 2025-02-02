@@ -2,13 +2,22 @@ import { client } from "./client";
 
 export class CredentialService {
   static async list() {
-    const res = await client.get<ListResponse>("/credential");
-    return { credentials: res.data.credentials };
+    const { data } = await client.get<ListResponse>("/credential", {
+      params: {
+        decrypt: true,
+      },
+    });
+    return { credentials: data.credentials };
   }
 
-  static async add(body: AddRequest) {
-    const res = await client.post<AddResponse>("/credential", body);
-    return res.data;
+  static async addEdit(body: AddRequest) {
+    const { data } = await client<AddResponse>({
+      url: "/credential",
+      data: body,
+      method: body.id ? "PATCH" : "POST",
+    });
+
+    return { credential: data.credential };
   }
 }
 
@@ -25,6 +34,7 @@ export type AddRequest = {
 };
 
 export type AddResponse = {
+  isSuccess: boolean;
   credential: Credential;
 };
 
@@ -37,4 +47,5 @@ export type Credential = {
   type: string;
   createdAt: string;
   updatedAt: string;
+  privateKeys?: Record<string, string>;
 };
