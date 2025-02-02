@@ -5,11 +5,27 @@ export class CredentialService {
     const res = await client.get<ListResponse>("/credential");
     return { credentials: res.data.credentials };
   }
+
+  static async add(body: AddRequest) {
+    const res = await client.post<AddResponse>("/credential", body);
+    return res.data;
+  }
 }
 
 export type ListResponse = {
   isSuccess: boolean;
   credentials: Credential[];
+};
+
+export type AddRequest = {
+  id?: string;
+  name: string;
+  type: string;
+  privateKeys: Record<string, unknown>;
+};
+
+export type AddResponse = {
+  credential: Credential;
 };
 
 export type Credential = {

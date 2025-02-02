@@ -45,6 +45,7 @@ const FormComponent = <Element extends FormElement<z.ZodAny>>({
                 placeholder={item.placeholder}
                 type={item.type}
                 {...field}
+                value={field.value || ""}
               />
             </FormControl>
             <FormMessage />
