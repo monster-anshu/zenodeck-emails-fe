@@ -9,8 +9,9 @@ import {
 } from "@repo/ui/components/dialog";
 import { Form } from "@repo/ui/components/form";
 import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { credentialQueryOptions } from "@web-queries/credential.query";
+import { MailService } from "@web-services/main.service";
 import type { Editor } from "grapesjs";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -29,6 +30,7 @@ export function meta({}: Route.MetaArgs) {
 const schema = z.object({
   credentialId: z.string(),
   from: z.string().email(),
+  subject: z.string().nonempty(),
   to: z.string().email(),
 });
 
@@ -38,17 +40,43 @@ export default function EditorPage() {
     resolver: zodResolver(schema),
     defaultValues: {
       from: "",
+      subject: "",
       to: "",
     },
   });
 
   const ref = useRef<Editor>(null);
-
   const [readyForSend, setReadyForSend] = useState(false);
 
-  function onSubmit(values: z.infer<typeof schema>) {}
+  const sendMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof schema>) => {
+      const res = await MailService.send({
+        ...values,
+        projectData: JSON.stringify(ref.current?.getProjectData() || ""),
+      });
+      return res;
+    },
+  });
 
   const formElements = [
+    {
+      name: "from",
+      label: "From",
+      placeholder: "admin@example.com",
+      type: "email",
+    },
+    {
+      name: "to",
+      label: "To",
+      placeholder: "user@example.com",
+      type: "email",
+    },
+    {
+      name: "subject",
+      label: "Subject",
+      placeholder: "Application for ...",
+      type: "text",
+    },
     {
       name: "credentialId",
       label: "Credential",
@@ -67,18 +95,6 @@ export default function EditorPage() {
           ),
           value: credential._id,
         })) || [],
-    },
-    {
-      name: "from",
-      label: "From",
-      placeholder: "admin@example.com",
-      type: "email",
-    },
-    {
-      name: "to",
-      label: "To",
-      placeholder: "user@example.com",
-      type: "email",
     },
   ] satisfies FormElement<typeof schema>[];
 
@@ -109,13 +125,17 @@ export default function EditorPage() {
           <div>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit as never)}
+                onSubmit={form.handleSubmit(sendMutation.mutate as never)}
                 className="grid grid-cols-2 gap-3"
               >
                 {formElements.map((item) => {
                   return <FormComponent element={item} key={item.name} />;
                 })}
-                <Button className="col-span-2" type="submit">
+                <Button
+                  className="col-span-2"
+                  type="submit"
+                  loading={sendMutation.isPending}
+                >
                   Send
                 </Button>
               </form>
