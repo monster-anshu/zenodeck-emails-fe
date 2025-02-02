@@ -17,7 +17,7 @@ import {
 } from "@web-services/credential.service";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { MdOutlineEmail } from "react-icons/md";
+import { LuMail } from "react-icons/lu";
 import { SiResend } from "react-icons/si";
 import { z } from "zod";
 
@@ -35,7 +35,7 @@ const credentialTypeOptions = [
   {
     value: "SMTP",
     label: "SMTP",
-    icon: <MdOutlineEmail />,
+    icon: <LuMail />,
   },
 ];
 

@@ -19,6 +19,11 @@ export class CredentialService {
 
     return { credential: data.credential };
   }
+
+  static async delete(id: string) {
+    const { data } = await client.delete<DeleteResponse>(`/credential/${id}`);
+    return data;
+  }
 }
 
 export type ListResponse = {
@@ -36,6 +41,10 @@ export type AddRequest = {
 export type AddResponse = {
   isSuccess: boolean;
   credential: Credential;
+};
+
+export type DeleteResponse = {
+  isSuccess: boolean;
 };
 
 export type Credential = {

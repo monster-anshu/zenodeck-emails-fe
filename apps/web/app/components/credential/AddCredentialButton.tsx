@@ -1,5 +1,5 @@
 import { Button } from "@repo/ui/components/button";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import AddEditCredentialModal from "./AddEditCredentialModal";
 
 type IAddCredentialButtonProps = {};
