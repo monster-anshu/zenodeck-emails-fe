@@ -65,7 +65,6 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
         },
         {} as Record<string, string>
       );
-      console.log(privateKeys);
       return {
         ...privateKeys,
         name: initialValue?.name || "",

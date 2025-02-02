@@ -70,9 +70,12 @@ const FormComponent = <Element extends FormElement<z.ZodAny>>({
         render={({ field }) => (
           <FormItem className={cn("col-span-2", item.className)}>
             <FormLabel>{item.label}</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={field.onChange} value={field.value || ""}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger
+                  value={field.value || ""}
+                  onReset={() => field.onChange(undefined)}
+                >
                   <SelectValue placeholder={item.placeholder} />
                 </SelectTrigger>
               </FormControl>

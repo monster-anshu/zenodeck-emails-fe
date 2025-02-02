@@ -27,18 +27,21 @@ import {
   openExport,
 } from "../email-editor-plugin/consts";
 
-interface ITopbarProps {
+type ITopbarProps = {
   isPreview: boolean;
-}
+  extraActions?: CommandButton[];
+};
 
-interface CommandButton {
+export type CommandButton = {
   id: string;
   icon: ReactNode;
   options?: Record<string, any>;
   disabled?: () => boolean;
-}
+  onClick?: () => void;
+  label?: ReactNode;
+};
 
-function Topbar({ isPreview }: ITopbarProps) {
+function Topbar({ isPreview, extraActions = [] }: ITopbarProps) {
   const editor = useEditor();
   const { Commands } = editor;
   const [, setUpdateCounter] = useState(0);
@@ -122,16 +125,19 @@ function Topbar({ isPreview }: ITopbarProps) {
       </div>
 
       <div className="ml-auto w-fit space-x-1">
-        {cmdButtons.map((item) => {
+        {[...cmdButtons, ...extraActions].map((item) => {
           const { icon, id, options, disabled } = item;
           return (
             <Button
               key={item.id}
-              onClick={() =>
-                Commands.isActive(id)
-                  ? Commands.stop(id)
-                  : Commands.run(id, options)
-              }
+              onClick={() => {
+                if (item.onClick) {
+                  item.onClick();
+                  return;
+                }
+                if (Commands.isActive(id)) Commands.stop(id);
+                else Commands.run(id, options);
+              }}
               disabled={disabled?.()}
               variant={"outline"}
             >
