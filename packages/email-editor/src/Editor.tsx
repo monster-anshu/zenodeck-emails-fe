@@ -6,7 +6,7 @@ import { RefObject, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Modal from "./components/Modal";
 import RightBar from "./components/RightBar";
-import Topbar from "./components/Topbar";
+import Topbar, { CommandButton } from "./components/Topbar";
 import { grapesjs, grapesjsCss } from "./config";
 import emailEditorPlugin from "./email-editor-plugin";
 import { activatePreview } from "./email-editor-plugin/consts";
@@ -20,6 +20,7 @@ interface IEmailEditorComponentProps {
   className?: string;
   editorRef?: RefObject<Editor | null>;
   variables?: IVariable[];
+  extraActions?: CommandButton[];
 }
 
 export default function EmailEditorComponent({
@@ -28,6 +29,7 @@ export default function EmailEditorComponent({
   editorRef: extRef,
   intialProjectData,
   variables = [],
+  extraActions,
 }: IEmailEditorComponentProps) {
   const editorRef = useRef(null as null | Editor);
   const [isLoading, setIsLoading] = useState(false);
@@ -131,7 +133,7 @@ export default function EmailEditorComponent({
         options={editorConfig}
       >
         <WithEditor>
-          <Topbar isPreview={isPreview} />
+          <Topbar isPreview={isPreview} extraActions={extraActions} />
         </WithEditor>
         <RightBar isPreview={isPreview} />
         <div>

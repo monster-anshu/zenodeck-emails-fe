@@ -1,33 +1,23 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/dialog";
+import { Form } from "@repo/ui/components/form";
+import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@web-providers/react-query";
+import { credentialQueryOptions } from "@web-queries/credential.query";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@repo/ui/components/form";
-import { Input } from "@repo/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
-import { cn } from "@repo/ui/lib/utils";
-import { Credential } from "@web-services/credential.service";
-import { FormElement } from "@web-types";
-import React, { FC } from "react";
+  Credential,
+  CredentialService,
+} from "@web-services/credential.service";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { MdOutlineEmail } from "react-icons/md";
+import { LuMail } from "react-icons/lu";
 import { SiResend } from "react-icons/si";
 import { z } from "zod";
 
@@ -38,142 +28,167 @@ type IAddEditCredentialModalProps = {
 
 const credentialTypeOptions = [
   {
-    value: "RESEND",
+    value: "RESEND_API",
     label: "Resend",
     icon: <SiResend />,
   },
   {
     value: "SMTP",
     label: "SMTP",
-    icon: <MdOutlineEmail />,
+    icon: <LuMail />,
   },
-] as const;
+];
 
 const schema = z.object({
   name: z.string().nonempty(),
-  type: z.enum(["RESEND", "SMTP"]),
-  apiKey: z.string().nonempty(),
+  private_apiKey: z.string().optional(),
+  private_host: z.string().optional(),
+  private_password: z.string().optional(),
+  private_port: z.coerce.number().optional(),
+  private_username: z.string().optional(),
+  type: z.enum(["RESEND_API", "SMTP"]),
 });
 
 const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
   onClose,
+  credential: initialValue,
 }) => {
-  const form = useForm();
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: async () => {
+      const privateKeys = Object.entries(
+        initialValue?.privateKeys || {}
+      ).reduce(
+        (acc, [key, value]) => {
+          acc["private_" + key] = value + "";
+          return acc;
+        },
+        {} as Record<string, string>
+      );
+      return {
+        ...privateKeys,
+        name: initialValue?.name || "",
+        type: (initialValue?.type as never) || "RESEND_API",
+      };
+    },
+  });
 
-  function onSubmit(values: z.infer<typeof schema>) {}
+  const addEditMutation = useMutation({
+    mutationFn: async (values: z.infer<typeof schema>) => {
+      const privateKeys = Object.entries(values).reduce(
+        (acc, [key, value]) => {
+          if (key.startsWith("private_")) {
+            acc[key.replace("private_", "")] = value;
+          }
+          return acc;
+        },
+        {} as Record<string, unknown>
+      );
+      const { credential } = await CredentialService.addEdit({
+        name: values.name,
+        privateKeys: privateKeys,
+        type: values.type,
+        id: initialValue?._id,
+      });
+      return credential;
+    },
+    onSuccess(credential) {
+      queryClient.setQueryData(credentialQueryOptions.queryKey, (curr) => {
+        if (!curr) return;
+        return {
+          ...curr,
+          credentials: curr.credentials.concat(credential),
+        };
+      });
+      onClose();
+    },
+  });
+
+  const values = form.watch();
+
+  const formElements = [
+    {
+      name: "name",
+      label: "Name",
+      placeholder: "My app",
+      type: "text",
+    },
+    {
+      name: "type",
+      label: "Product Id",
+      type: "select",
+      options: credentialTypeOptions,
+    },
+    {
+      name: "private_apiKey",
+      label: "Api key",
+      placeholder: "super_secret_1234",
+      type: "text",
+      hide: values.type !== "RESEND_API",
+    },
+    {
+      name: "private_host",
+      label: "Host",
+      placeholder: "smtp.gmail.com",
+      type: "text",
+      className: "col-span-1",
+      hide: values.type !== "SMTP",
+    },
+    {
+      name: "private_port",
+      label: "Port",
+      placeholder: "334",
+      type: "text",
+      className: "col-span-1",
+      hide: values.type !== "SMTP",
+      regex: /^\d*$/,
+    },
+    {
+      name: "private_username",
+      label: "Username",
+      placeholder: "username",
+      type: "text",
+      hide: values.type !== "SMTP",
+    },
+    {
+      name: "private_password",
+      label: "Password",
+      placeholder: "super_secret_1234",
+      type: "text",
+      hide: values.type !== "SMTP",
+    },
+  ] satisfies FormElement<typeof schema>[];
+
+  function onSubmit(values: z.infer<typeof schema>) {
+    addEditMutation.mutate(values);
+  }
 
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Add credential</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit as never)}
             className="grid grid-cols-2 gap-3"
           >
             {formElements.map((item) => {
-              if (
-                item.type === "email" ||
-                item.type === "password" ||
-                item.type === "text"
-              ) {
-                return (
-                  <FormField
-                    key={item.name}
-                    control={form.control}
-                    name={item.name}
-                    render={({ field }) => (
-                      <FormItem className={cn("col-span-2", item.className)}>
-                        <FormLabel>{item.label}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={item.placeholder}
-                            type={item.type}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                );
-              }
-
-              if (item.type === "select") {
-                return (
-                  <FormField
-                    control={form.control}
-                    name={item.name}
-                    key={item.name}
-                    render={({ field }) => (
-                      <FormItem className={cn("col-span-2", item.className)}>
-                        <FormLabel>{item.label}</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder={item.placeholder} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {item.options.map((option) => {
-                              return (
-                                <SelectItem
-                                  value={option.value}
-                                  key={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                );
-              }
-              return null;
+              return <FormComponent element={item} key={item.name} />;
             })}
-            <Button className="col-span-2" type="submit">
+            <Button
+              className="col-span-2"
+              type="submit"
+              loading={addEditMutation.isPending}
+            >
               Submit
             </Button>
           </form>
         </Form>
       </DialogContent>
-      <DialogFooter></DialogFooter>
     </Dialog>
   );
 };
-
-const formElements: FormElement<typeof schema>[] = [
-  {
-    name: "name",
-    label: "Name",
-    placeholder: "Super secret",
-    type: "text",
-  },
-  {
-    name: "type",
-    label: "Product Id",
-    type: "select",
-    options: credentialTypeOptions.map((credential) => ({
-      label: credential.label,
-      value: credential.value,
-    })),
-  },
-  {
-    name: "apiKey",
-    label: "Api key",
-    placeholder: "********",
-    type: "password",
-  },
-];
 
 export default AddEditCredentialModal;

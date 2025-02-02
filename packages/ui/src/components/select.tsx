@@ -1,5 +1,5 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@repo/ui/lib/utils";
@@ -12,22 +12,46 @@ const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "border-input ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    onReset?: () => void;
+  }
+>(({ className, children, onReset, ...props }, ref) => {
+  return (
+    <div
+      className={cn(
+        "border-input ring-offset-background placeholder:text-muted-foreground focus:ring-ring relative z-0 flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border bg-transparent py-2 text-sm shadow-sm focus:outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        className
+      )}
+    >
+      <SelectPrimitive.Trigger
+        ref={ref}
+        className={cn("w-full truncate py-2 pl-3 pr-10 text-left")}
+        {...props}
+      >
+        <span
+          className={cn(
+            `w-full truncate pr-2`,
+            !props.value && "text-neutral-400"
+          )}
+        >
+          {children}
+        </span>
+      </SelectPrimitive.Trigger>
+      <SelectPrimitive.Icon
+        className={cn(
+          `absolute right-2 cursor-pointer`,
+          !props.value && "pointer-events-none"
+        )}
+      >
+        {props.value ? (
+          <X className="h-4 w-4 opacity-50" onClick={onReset} />
+        ) : (
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        )}
+      </SelectPrimitive.Icon>
+    </div>
+  );
+});
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectScrollUpButton = React.forwardRef<

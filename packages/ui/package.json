@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./style.css": "./src/style.css",
-    "./postcss.config": "./postcss.config.mjs",
-    "./tailwind.config": "./tailwind.config.ts",
-    "./lib/*": "./src/lib/*.ts",
     "./components/*": "./src/components/*.tsx",
-    "./hooks/*": "./src/hooks/*.ts"
+    "./hooks/*": "./src/hooks/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./molecules/*": "./src/molecules/*.ts",
+    "./postcss.config": "./postcss.config.mjs",
+    "./style.css": "./src/style.css",
+    "./tailwind.config": "./tailwind.config.ts"
   },
   "scripts": {
     "ui:add": "pnpm dlx shadcn@2.1.6 add"

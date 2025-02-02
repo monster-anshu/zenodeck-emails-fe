@@ -6,7 +6,7 @@ export interface IReactQueryProviderProps {
   children: React.ReactNode;
 }
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
