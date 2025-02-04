@@ -132,7 +132,7 @@ const RightBar: FC<IRightBarProps> = ({}) => {
     <>
       {isPreview && <div className="row-span-2"></div>}
       <div
-        className="bg-muted relative row-span-2 w-80 overflow-auto border"
+        className="dark:bg-background bg-muted relative row-span-2 w-80 overflow-auto border"
         style={{
           display: isPreview || !editor ? "none" : "block",
         }}
@@ -144,7 +144,7 @@ const RightBar: FC<IRightBarProps> = ({}) => {
             if (!tab) return;
             handleTabClick(tab);
           }}
-          className="bg-muted sticky top-0 z-50 border-b px-2 py-2"
+          className="dark:bg-background bg-muted sticky top-0 z-50 border-b px-2 py-2"
         >
           <TabsList
             className="grid w-full"
