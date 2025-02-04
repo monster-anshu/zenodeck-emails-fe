@@ -1,21 +1,108 @@
 {
   "assets": [],
   "styles": [
-    { "selectors": ["link"], "style": { "color": "rgb(217, 131, 166)" } },
-    { "selectors": ["browser-link"], "style": { "font-size": "12px" } },
-    { "selectors": ["main-body-cell"], "style": { "color": "black" } },
     {
-      "selectors": ["#if1r"],
-      "style": { "background-color": "#eaeced" },
-      "wrapper": 1
+      "selectors": [],
+      "selectorsAdd": "body",
+      "style": {
+        "font-family": "Arial, sans-serif",
+        "margin-top": "0px",
+        "margin-right": "0px",
+        "margin-bottom": "0px",
+        "margin-left": "0px",
+        "padding-top": "0px",
+        "padding-right": "0px",
+        "padding-bottom": "0px",
+        "padding-left": "0px",
+        "background-color": "rgb(244, 244, 244)"
+      }
     },
-    { "selectors": ["#i8xv"], "style": { "padding": "6px 6px 6px 6px" } },
     {
-      "selectors": ["#i9tf"],
-      "style": { "max-width": "1080px", "background-color": "#ffffff" }
+      "selectors": ["container"],
+      "style": {
+        "max-width": "600px",
+        "margin-top": "20px",
+        "margin-right": "auto",
+        "margin-bottom": "20px",
+        "margin-left": "auto",
+        "background-image": "initial",
+        "background-position-x": "initial",
+        "background-position-y": "initial",
+        "background-size": "initial",
+        "background-repeat": "initial",
+        "background-attachment": "initial",
+        "background-origin": "initial",
+        "background-clip": "initial",
+        "background-color": "rgb(255, 255, 255)",
+        "padding-top": "20px",
+        "padding-right": "20px",
+        "padding-bottom": "20px",
+        "padding-left": "20px",
+        "border-top-left-radius": "8px",
+        "border-top-right-radius": "8px",
+        "border-bottom-right-radius": "8px",
+        "border-bottom-left-radius": "8px",
+        "box-shadow": "rgba(0, 0, 0, 0.1) 0px 0px 10px"
+      }
     },
-    { "selectors": ["heading"], "style": { "text-align": "center" } },
-    { "selectors": ["paragraph"], "style": { "text-align": "center" } }
+    {
+      "selectors": ["header"],
+      "style": {
+        "text-align": "center",
+        "font-size": "24px",
+        "font-weight": "bold",
+        "padding-top": "10px",
+        "padding-right": "0px",
+        "padding-bottom": "10px",
+        "padding-left": "0px"
+      }
+    },
+    {
+      "selectors": ["content"],
+      "style": {
+        "font-size": "16px",
+        "color": "rgb(51, 51, 51)",
+        "line-height": "1.5"
+      }
+    },
+    {
+      "selectors": ["footer"],
+      "style": {
+        "text-align": "center",
+        "font-size": "14px",
+        "color": "rgb(119, 119, 119)",
+        "padding-top": "20px"
+      }
+    },
+    {
+      "selectors": ["button"],
+      "style": {
+        "display": "inline-block",
+        "padding-top": "10px",
+        "padding-right": "20px",
+        "padding-bottom": "10px",
+        "padding-left": "20px",
+        "margin-top": "20px",
+        "color": "rgb(255, 255, 255)",
+        "background-image": "initial",
+        "background-position-x": "initial",
+        "background-position-y": "initial",
+        "background-size": "initial",
+        "background-repeat": "initial",
+        "background-attachment": "initial",
+        "background-origin": "initial",
+        "background-clip": "initial",
+        "background-color": "rgb(0, 123, 255)",
+        "text-decoration-line": "none",
+        "text-decoration-thickness": "initial",
+        "text-decoration-style": "initial",
+        "text-decoration-color": "initial",
+        "border-top-left-radius": "5px",
+        "border-top-right-radius": "5px",
+        "border-bottom-right-radius": "5px",
+        "border-bottom-left-radius": "5px"
+      }
+    }
   ],
   "pages": [
     {
@@ -34,68 +121,94 @@
             ],
             "attributes": { "id": "if1r" },
             "components": [
-              { "attributes": { "id": "i9sa" } },
-              { "attributes": { "id": "ivlg" } },
               {
-                "attributes": { "id": "i8xv" },
+                "tagName": "meta",
+                "void": true,
+                "attributes": { "charset": "UTF-8" }
+              },
+              {
+                "tagName": "meta",
+                "void": true,
+                "attributes": {
+                  "name": "viewport",
+                  "content": "width=device-width, initial-scale=1.0"
+                }
+              },
+              {
+                "tagName": "title",
+                "type": "text",
+                "components": [
+                  { "type": "textnode", "content": "Email Template" }
+                ]
+              },
+              {
+                "classes": ["container"],
                 "components": [
                   {
-                    "type": "table",
-                    "droppable": ["tbody", "thead", "tfoot"],
-                    "attributes": {
-                      "style": "height:150px;margin:0 auto 10px auto;padding:5px 5px 5px 5px;width:100%",
-                      "id": "i9tf"
-                    },
+                    "type": "text",
+                    "classes": ["header"],
                     "components": [
                       {
-                        "type": "row",
-                        "draggable": ["thead", "tbody", "tfoot"],
-                        "droppable": ["th", "td"],
+                        "type": "textnode",
+                        "content": "Welcome to Our Service"
+                      }
+                    ]
+                  },
+                  {
+                    "classes": ["content"],
+                    "components": [
+                      {
+                        "tagName": "p",
+                        "type": "text",
+                        "components": [
+                          { "type": "textnode", "content": "Hi [User]," }
+                        ]
+                      },
+                      {
+                        "tagName": "p",
+                        "type": "text",
                         "components": [
                           {
-                            "type": "cell",
-                            "draggable": ["tr"],
-                            "attributes": {
-                              "style": "padding:0;margin:0;vertical-align:top;width:100%",
-                              "id": "i3b2"
-                            },
-                            "components": [
-                              {
-                                "attributes": { "id": "ir0q" },
-                                "components": [
-                                  {
-                                    "tagName": "h1",
-                                    "type": "text",
-                                    "classes": ["heading"],
-                                    "components": [
-                                      {
-                                        "type": "textnode",
-                                        "content": "Start Designing your awesome template"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "tagName": "p",
-                                    "type": "text",
-                                    "classes": ["paragraph"],
-                                    "components": [
-                                      {
-                                        "type": "textnode",
-                                        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "type": "textnode",
+                            "content": "Thank you for signing up for our service. We're excited to have you on board."
                           }
                         ]
+                      },
+                      {
+                        "tagName": "p",
+                        "type": "text",
+                        "components": [
+                          {
+                            "type": "textnode",
+                            "content": "Click the button below to get started:"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "link",
+                        "classes": ["button"],
+                        "attributes": { "href": "#" },
+                        "components": [
+                          { "type": "textnode", "content": "Get Started" }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "classes": ["footer"],
+                    "components": [
+                      {
+                        "type": "textnode",
+                        "content": "© 2025 Your Company. All rights reserved."
                       }
                     ]
                   }
                 ]
               }
-            ]
+            ],
+            "head": { "type": "head" },
+            "docEl": { "tagName": "html" }
           },
           "id": "EPAAy4r8Dd9QzRpG"
         }
@@ -103,5 +216,7 @@
       "type": "main",
       "id": "pzLOmJU8EjhWH9pw"
     }
-  ]
+  ],
+  "symbols": [],
+  "dataSources": []
 }
