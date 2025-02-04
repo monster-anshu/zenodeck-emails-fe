@@ -27,6 +27,7 @@ type ISendMailModalProps = {
 const schema = z.object({
   credentialId: z.string(),
   from: z.string().email(),
+  name: z.string(),
   subject: z.string().nonempty(),
   to: z.string().email(),
 });
@@ -43,6 +44,7 @@ const SendMailModal: FC<ISendMailModalProps> = ({
       from: "",
       subject: "",
       to: "",
+      name: "",
     },
   });
 
@@ -58,16 +60,24 @@ const SendMailModal: FC<ISendMailModalProps> = ({
 
   const formElements = [
     {
+      name: "name",
+      label: "Name (optional)",
+      placeholder: "John Doe",
+      type: "text",
+    },
+    {
       name: "from",
       label: "From",
       placeholder: "admin@example.com",
       type: "email",
+      className: "col-span-1",
     },
     {
       name: "to",
       label: "To",
       placeholder: "user@example.com",
       type: "email",
+      className: "col-span-1",
     },
     {
       name: "subject",
