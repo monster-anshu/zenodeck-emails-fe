@@ -13,4 +13,5 @@ type SendRequest = {
   projectData: string;
   from: string;
   to: string;
+  name?: string;
 };

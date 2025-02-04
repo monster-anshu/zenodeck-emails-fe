@@ -19,7 +19,7 @@ export default function Blocks({ isVisible }: IBlocksProps) {
             {blocks.map((block, i) => {
               return (
                 <div
-                  className="hover:bg-background bg-background/70 group cursor-grab rounded-lg border p-2 transition-transform hover:scale-110"
+                  className="border-input bg-background dark:hover:bg-accent hover:bg-background/70 group cursor-grab rounded-lg border p-2 shadow-sm transition-transform hover:scale-110"
                   key={block.id || i}
                   onDragStart={(ev) => dragStart(block, ev.nativeEvent)}
                   onDragEnd={() => dragStop(false)}

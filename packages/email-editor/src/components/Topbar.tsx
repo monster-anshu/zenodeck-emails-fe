@@ -104,12 +104,12 @@ function Topbar({ isPreview, extraActions = [] }: ITopbarProps) {
   }
 
   return (
-    <div className="bg-muted col-span-1 flex border px-2 py-2">
+    <div className="dark:bg-background bg-muted col-span-1 flex flex-wrap gap-0.5 border px-2 py-2">
       <div className="w-44">
         <DevicesProvider>
           {({ selected, select, devices }) => (
             <Select onValueChange={(value) => select(value)} value={selected}>
-              <SelectTrigger>
+              <SelectTrigger value={selected}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -124,28 +124,28 @@ function Topbar({ isPreview, extraActions = [] }: ITopbarProps) {
         </DevicesProvider>
       </div>
 
-      <div className="ml-auto w-fit space-x-1">
-        {[...cmdButtons, ...extraActions].map((item) => {
-          const { icon, id, options, disabled } = item;
-          return (
-            <Button
-              key={item.id}
-              onClick={() => {
-                if (item.onClick) {
-                  item.onClick();
-                  return;
-                }
-                if (Commands.isActive(id)) Commands.stop(id);
-                else Commands.run(id, options);
-              }}
-              disabled={disabled?.()}
-              variant={"outline"}
-            >
-              {icon}
-            </Button>
-          );
-        })}
-      </div>
+      <div className="flex-1"></div>
+
+      {[...cmdButtons, ...extraActions].map((item) => {
+        const { icon, id, options, disabled } = item;
+        return (
+          <Button
+            key={item.id}
+            onClick={() => {
+              if (item.onClick) {
+                item.onClick();
+                return;
+              }
+              if (Commands.isActive(id)) Commands.stop(id);
+              else Commands.run(id, options);
+            }}
+            disabled={disabled?.()}
+            variant={"outline"}
+          >
+            {icon}
+          </Button>
+        );
+      })}
     </div>
   );
 }
