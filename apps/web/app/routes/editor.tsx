@@ -11,6 +11,7 @@ import { Form } from "@repo/ui/components/form";
 import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { credentialQueryOptions } from "@web-queries/credential.query";
+import FileService from "@web-services/file.service";
 import { MailService } from "@web-services/main.service";
 import type { Editor } from "grapesjs";
 import { useRef, useState } from "react";
@@ -111,6 +112,10 @@ export default function EditorPage() {
             },
           },
         ]}
+        onUpload={async (file) => {
+          const { url } = await FileService.upload(file);
+          return url;
+        }}
         editorRef={ref}
         className="h-full w-full"
       />

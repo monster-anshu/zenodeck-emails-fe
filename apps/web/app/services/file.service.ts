@@ -13,7 +13,7 @@ export default class FileService {
 
     try {
       onProgress?.(2);
-      const res = await client.post<UploadResponse>(`/file/upload`, {
+      const res = await client.post<UploadResponse>(`/file`, {
         mimeType: file.type || file.name.split(".").pop(),
         fileName: file.name,
         module,
@@ -63,7 +63,7 @@ export default class FileService {
   }
 
   static async delete(key: string) {
-    const { data } = await client.post<ApiResponse>(`/file/delete`, {
+    const { data } = await client.post<ApiResponse>(`/file`, {
       key: key,
     });
     return data;
