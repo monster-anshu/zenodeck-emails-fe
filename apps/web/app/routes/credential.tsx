@@ -48,7 +48,7 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
   });
 
   return (
-    <main className="flex-1 px-6 py-4">
+    <main className="container flex-1 overflow-auto p-4">
       <Header
         location={[{ label: "Credential", link: "/credential" }]}
         rightSection={<AddCredentialButton />}
