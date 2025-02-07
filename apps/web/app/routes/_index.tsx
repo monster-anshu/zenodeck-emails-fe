@@ -1,16 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import DashboardCard from "@web-components/dashboard/DashboardCard";
 import { dashboardQueryOptions } from "@web-queries/dashboard.query";
+import { Link } from "react-router";
 import {
-  Bar,
-  BarChart,
   CartesianGrid,
   Line,
   LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis,
 } from "recharts";
 import type { Route } from "./+types/_index";
 
@@ -40,13 +38,34 @@ export default function IndexPage() {
         gridAutoRows: "min-content",
       }}
     >
-      <DashboardCard>credential count</DashboardCard>
-      <DashboardCard>24 hour count</DashboardCard>
-      <DashboardCard>storage used</DashboardCard>
-      <DashboardCard>ctr</DashboardCard>
-      <DashboardCard>open mail</DashboardCard>
+      <DashboardCard>
+        <p className="font-medium">Credentials</p>
+        <p className="flex items-center justify-between text-sm">
+          <span>{4}</span>
+          <Link to={"/credential"} aria-label="Add credential">
+            {" "}
+            +
+          </Link>
+        </p>
+      </DashboardCard>
+      <DashboardCard>
+        <p className="font-medium">Email sent</p>
+        <p className="text-sm">{35}</p>
+      </DashboardCard>
+      <DashboardCard>
+        <p className="font-medium">CTR</p>
+        <p className="text-sm">3746</p>
+      </DashboardCard>
+      <DashboardCard>
+        <p className="font-medium">Mail seen</p>
+        <p className="text-sm">31</p>
+      </DashboardCard>
+      <DashboardCard>
+        <p className="font-medium">Storage uses</p>
+        <p className="text-sm">243.4 MB</p>
+      </DashboardCard>
       <DashboardCard className="col-span-full grid h-72 grid-rows-[auto_1fr]">
-        <p className="mb-4 text-lg font-medium">Weekly report</p>
+        <p className="mb-4 text-lg font-medium">Email sent</p>
         <ResponsiveContainer height={"100%"} width={"100%"}>
           <LineChart data={lineChartData}>
             <Line type="monotone" dataKey="uv" stroke="#8884d8" />
@@ -58,7 +77,7 @@ export default function IndexPage() {
         </ResponsiveContainer>
       </DashboardCard>
       <DashboardCard className="col-span-full grid h-72 grid-rows-[auto_1fr]">
-        <p className="mb-4 text-lg font-medium">Weekly report</p>
+        <p className="mb-4 text-lg font-medium">Email seen</p>
         <ResponsiveContainer height={"100%"} width={"100%"}>
           <LineChart data={lineChartData}>
             <Line type="monotone" dataKey="uv" stroke="#8884d8" />
@@ -70,7 +89,7 @@ export default function IndexPage() {
         </ResponsiveContainer>
       </DashboardCard>
       <DashboardCard className="col-span-full grid h-72 grid-rows-[auto_1fr]">
-        <p className="mb-4 text-lg font-medium">Weekly report</p>
+        <p className="mb-4 text-lg font-medium">Click rate (CTR)</p>
         <ResponsiveContainer height={"100%"} width={"100%"}>
           <LineChart data={lineChartData}>
             <Line type="monotone" dataKey="uv" stroke="#8884d8" />

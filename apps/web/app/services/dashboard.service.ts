@@ -2,7 +2,22 @@ import { client } from "./client";
 
 export class DashboardService {
   static async get() {
-    const res = await client.get("/dashboard");
-    return res;
+    const { data } = await client.get<GetResponse>("/dashboard");
+    return data;
   }
 }
+
+type GetResponse = {
+  history: History;
+  isSuccess: boolean;
+};
+
+type History = {
+  stats: Stat[];
+  count: number;
+};
+
+type Stat = {
+  date: Date;
+  count: number;
+};
