@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import DashboardCard from "@web-components/dashboard/DashboardCard";
+import DashboardSkeleton from "@web-components/dashboard/DashboardSkeleton";
 import { dashboardQueryOptions } from "@web-queries/dashboard.query";
 import { Link } from "react-router";
 import {
@@ -19,11 +20,15 @@ export function meta({}: Route.MetaArgs) {
 
 export default function IndexPage() {
   const dashboardQuery = dashboardQueryOptions();
-  const { data } = useQuery(dashboardQuery);
+  const { data, isLoading } = useQuery(dashboardQuery);
 
   const historyChart = data?.history.stats || [];
   const ctrChart = data?.ctr.stats || [];
   const mailOpenedChart = data?.openedMail.stats || [];
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <main
@@ -62,7 +67,12 @@ export default function IndexPage() {
         <p className="mb-4 text-lg font-medium">Email sent</p>
         <ResponsiveContainer height={"100%"} width={"100%"}>
           <LineChart data={historyChart}>
-            <Line type="monotone" dataKey="count" stroke="#8884d8" />
+            <Line
+              type="monotone"
+              isAnimationActive={false}
+              dataKey="count"
+              stroke="#8884d8"
+            />
             <XAxis dataKey="date" />
             {/* <YAxis dataKey="count" /> */}
             <CartesianGrid strokeDasharray="3 3" className="opacity-20" />
@@ -74,7 +84,12 @@ export default function IndexPage() {
         <p className="mb-4 text-lg font-medium">Email seen</p>
         <ResponsiveContainer height={"100%"} width={"100%"}>
           <LineChart data={mailOpenedChart}>
-            <Line type="monotone" dataKey="count" stroke="#8884d8" />
+            <Line
+              type="monotone"
+              isAnimationActive={false}
+              dataKey="count"
+              stroke="#8884d8"
+            />
             <XAxis dataKey="date" />
             {/* <YAxis dataKey="count" /> */}
             <CartesianGrid strokeDasharray="3 3" className="opacity-20" />
@@ -86,7 +101,12 @@ export default function IndexPage() {
         <p className="mb-4 text-lg font-medium">Click rate (CTR)</p>
         <ResponsiveContainer height={"100%"} width={"100%"}>
           <LineChart data={ctrChart}>
-            <Line type="monotone" dataKey="count" stroke="#8884d8" />
+            <Line
+              type="monotone"
+              isAnimationActive={false}
+              dataKey="count"
+              stroke="#8884d8"
+            />
             <XAxis dataKey="date" />
             {/* <YAxis dataKey="count" /> */}
             <CartesianGrid strokeDasharray="3 3" className="opacity-20" />
