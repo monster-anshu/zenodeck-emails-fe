@@ -1,0 +1,22 @@
+:root {
+  --skeleton-l1-bg: hsl(var(--secondary));
+  --skeleton-l2-bg: #5c5c5c;
+}
+
+.skeletonContainer {
+  background: linear-gradient(
+    110deg,
+    var(--skeleton-l1-bg) 8%,
+    var(--skeleton-l2-bg) 18%,
+    var(--skeleton-l1-bg) 33%
+  );
+
+  background-size: 200% 100%;
+  animation: 600ms shine linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}

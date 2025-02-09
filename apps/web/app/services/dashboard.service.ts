@@ -8,13 +8,21 @@ export class DashboardService {
 }
 
 type GetResponse = {
-  history: History;
+  history: StatParent;
+  ctr: StatParent;
+  openedMail: StatParent;
   isSuccess: boolean;
+  appInfo: {
+    storageUsed: number;
+  };
+  credential: {
+    total: number;
+  };
 };
 
-type History = {
+type StatParent = {
   stats: Stat[];
-  count: number;
+  total: number;
 };
 
 type Stat = {
