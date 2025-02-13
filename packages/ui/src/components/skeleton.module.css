@@ -1,9 +1,10 @@
 :root {
   --skeleton-l1-bg: hsl(var(--secondary));
-  --skeleton-l2-bg: #5c5c5c;
+  --skeleton-l2-bg: #3f3f3f;
+  --blink-color: hsl(var(--secondary) / 1);
 }
 
-.skeletonContainer {
+.skeletonShine {
   background: linear-gradient(
     110deg,
     var(--skeleton-l1-bg) 8%,
@@ -12,11 +13,28 @@
   );
 
   background-size: 200% 100%;
-  animation: 600ms shine linear infinite;
+  animation: 500ms shine linear infinite;
+}
+
+.skeletonBlink {
+  background-color: var(--blink-color);
+  animation: 900ms blink linear infinite;
 }
 
 @keyframes shine {
   to {
     background-position-x: -200%;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0.9;
   }
 }
