@@ -16,8 +16,12 @@ export const linkes = [
     hideSidebar: true,
   },
   {
-    label: "Credentials",
+    label: "Credential",
     link: "/credential",
+  },
+  {
+    label: "Lead list",
+    link: "/lead-list",
   },
   {
     label: "Settings",
