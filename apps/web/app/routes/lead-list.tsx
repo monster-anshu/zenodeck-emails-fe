@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@repo/ui/components/select";
 import { FormComponent } from "@repo/ui/molecules/form-component";
+import { useMutation } from "@tanstack/react-query";
+import { LeadListService } from "@web-services/lead-list.service";
 import Papa from "papaparse";
 import { FC, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -51,6 +53,10 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
   const [selectedFile, setSelectedFile] = useState(null as null | File);
   const dataRef = useRef<unknown[]>([]);
 
+  const addMutation = useMutation({
+    mutationFn: LeadListService.add,
+  });
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -64,15 +70,15 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
     Papa.parse(file, {
       header: true,
       complete: function (results) {
-        if (results.errors.length) {
-          alert("Error in csv");
-          return;
-        }
         setSelectedFile(file);
         dataRef.current = results.data;
         const headers = results.meta.fields;
         setHeaders(headers || []);
       },
+      error() {
+        alert("Error in csv");
+      },
+      skipEmptyLines: true,
     });
   };
 
@@ -117,7 +123,7 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
       leads.push(lead);
     });
 
-    console.log(leads);
+    addMutation.mutate({ name: values.name, leads: leads });
   }
 
   const setMapping = (field: string, value: string | null) => {
@@ -191,7 +197,6 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
                                   ))}
                                 </SelectContent>
                               </Select>
-                              {/* <FormMessage /> */}
                             </FormItem>
                           )}
                         />
@@ -199,8 +204,12 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
                     })}
                   </div>
                 )}
-                <Button className="col-span-2" type="submit">
-                  Submit
+                <Button
+                  className="col-span-2"
+                  type="submit"
+                  loading={addMutation.isPending}
+                >
+                  Create
                 </Button>
               </form>
             </Form>
