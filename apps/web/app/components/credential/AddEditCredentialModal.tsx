@@ -20,6 +20,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { LuMail } from "react-icons/lu";
 import { SiResend } from "react-icons/si";
+import { toast } from "sonner";
 import { z } from "zod";
 
 type IAddEditCredentialModalProps = {
@@ -101,6 +102,9 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
           credentials: curr.credentials.concat(credential),
         };
       });
+      toast.success(
+        initialValue ? "Createndial updated" : "Createndial created"
+      );
       onClose();
     },
   });

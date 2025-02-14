@@ -13,7 +13,14 @@ export class CredentialService {
   static async addEdit(body: AddRequest) {
     const { data } = await client<AddResponse>({
       url: "/credential",
-      data: body,
+      data: {
+        name: body.name,
+        id: body.id,
+        payload: {
+          type: body.type,
+          privateKeys: body.privateKeys,
+        },
+      },
       method: body.id ? "PATCH" : "POST",
     });
 

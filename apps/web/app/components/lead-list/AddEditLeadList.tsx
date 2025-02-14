@@ -16,6 +16,7 @@ import ImportLeads, {
 import { LeadList, LeadListService } from "@web-services/lead-list.service";
 import { FC, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 type IAddEditLeadListModalProps = {
@@ -36,6 +37,7 @@ const AddEditLeadListModal: FC<IAddEditLeadListModalProps> = ({
   const addEditMutation = useMutation({
     mutationFn: LeadListService.addEdit,
     onSuccess: () => {
+      toast.success(leadList ? "Lead list updated" : "Lead list created");
       onClose();
     },
   });

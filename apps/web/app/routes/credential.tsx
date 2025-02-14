@@ -20,6 +20,7 @@ import {
 import { FC, useState } from "react";
 import { LuMail, LuPenLine, LuTrash2 } from "react-icons/lu";
 import { SiResend } from "react-icons/si";
+import { toast } from "sonner";
 
 type ICredentialPageProps = {};
 const CredentialPage: FC<ICredentialPageProps> = () => {
@@ -36,7 +37,6 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
       await CredentialService.delete(id);
     },
     onSuccess(_, id) {
-      setSelectedForDelete(null);
       queryClient.setQueryData(credentialQueryOptions.queryKey, (curr) => {
         return {
           ...curr,
@@ -44,6 +44,8 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
             curr?.credentials.filter((item) => item._id !== id) || [],
         };
       });
+      setSelectedForDelete(null);
+      toast.success("Credential deleted");
     },
   });
 
