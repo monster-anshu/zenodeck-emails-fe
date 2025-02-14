@@ -14,10 +14,13 @@ type IImportLeadsProps = {
   className?: string;
 };
 export type IImportLeadsRef = {
-  get: () => null | {
-    leads: Record<string, string>[];
-    mapping: Record<string, string>;
-  };
+  get: () =>
+    | "NO_FILE"
+    | "ERROR_MAPPING"
+    | {
+        leads: Record<string, string>[];
+        mapping: Record<string, string>;
+      };
 };
 
 const fieldsToMap = [
@@ -66,6 +69,7 @@ const ImportLeads = forwardRef<IImportLeadsRef, IImportLeadsProps>(
     }));
 
     const getMappedData = () => {
+      if (!selectedFile) return "NO_FILE";
       const errors = {} as Record<string, string>;
       for (const field of fieldsToMap) {
         const csvField = mapping[field.value];
@@ -78,7 +82,7 @@ const ImportLeads = forwardRef<IImportLeadsRef, IImportLeadsProps>(
       setError(errors);
 
       if (Object.keys(errors).length) {
-        return null;
+        return "ERROR_MAPPING";
       }
 
       const leads: Record<string, string>[] = [];
@@ -122,7 +126,12 @@ const ImportLeads = forwardRef<IImportLeadsRef, IImportLeadsProps>(
 
     return (
       <div className={className}>
-        {!selectedFile && <Dropzone onFileSelect={handleFileSelect} />}
+        {!selectedFile && (
+          <div className="grid gap-2">
+            <Label>Import lead list </Label>
+            <Dropzone onFileSelect={handleFileSelect} />
+          </div>
+        )}
         {selectedFile && (
           <div className="grid grid-cols-[1fr_50px_1fr] items-center gap-2">
             <Label className="col-span-full">Field mapping</Label>

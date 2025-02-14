@@ -1,19 +1,30 @@
 import { client } from "./client";
 
 export class LeadListService {
-  static async add(body: AddRequest) {
-    const { data } = await client.post("/lead-list", body);
+  static async addEdit(body: AddEditRequest) {
+    const { data } = await client<AddEditReposne>({
+      method: !body.id ? "POST" : "PATCH",
+      data: body,
+      url: "/lead-list",
+    });
+
     return data;
   }
+
   static async list() {
     const { data } = await client.get<ListResponse>("/lead-list");
     return data;
   }
 }
 
-type AddRequest = {
+type AddEditRequest = {
+  id?: string;
   name: string;
   leads: Record<string, string>[];
+};
+
+type AddEditReposne = {
+  leadList: LeadList;
 };
 
 type ListResponse = {

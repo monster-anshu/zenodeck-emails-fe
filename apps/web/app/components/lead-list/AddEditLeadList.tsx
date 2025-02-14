@@ -3,6 +3,7 @@ import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/dialog";
@@ -12,46 +13,60 @@ import { useMutation } from "@tanstack/react-query";
 import ImportLeads, {
   IImportLeadsRef,
 } from "@web-components/lead-list/ImportLeads";
-import { LeadListService } from "@web-services/lead-list.service";
+import { LeadList, LeadListService } from "@web-services/lead-list.service";
 import { FC, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-type IAddLeadListModalProps = {
+type IAddEditLeadListModalProps = {
   onClose: () => void;
+  leadList?: LeadList;
 };
 
 const schema = z.object({
   name: z.string().nonempty(),
 });
 
-const AddLeadListModal: FC<IAddLeadListModalProps> = ({ onClose }) => {
+const AddEditLeadListModal: FC<IAddEditLeadListModalProps> = ({
+  onClose,
+  leadList,
+}) => {
   const ref = useRef<IImportLeadsRef | null>(null);
 
-  const addMutation = useMutation({
-    mutationFn: LeadListService.add,
+  const addEditMutation = useMutation({
+    mutationFn: LeadListService.addEdit,
+    onSuccess: () => {
+      onClose();
+    },
   });
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
+      name: leadList?.name || "",
     },
   });
 
   function onSubmit(values: z.infer<typeof schema>) {
     const result = ref.current?.get();
-    if (!result) {
+    if (result === "ERROR_MAPPING") {
       return;
     }
-    addMutation.mutate({ name: values.name, leads: result.leads });
+    const leads = (result === "NO_FILE" ? [] : result?.leads) || [];
+    addEditMutation.mutate({
+      name: values.name,
+      leads: leads || [],
+      id: leadList?._id,
+    });
   }
 
   return (
     <Dialog modal={false} open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create lead list</DialogTitle>
+          <DialogTitle>
+            {leadList ? "Edit lead list" : "Add lead list"}
+          </DialogTitle>
         </DialogHeader>
         <div>
           <Form {...form}>
@@ -67,15 +82,14 @@ const AddLeadListModal: FC<IAddLeadListModalProps> = ({ onClose }) => {
                   placeholder: "User list",
                 }}
               />
-
-              <ImportLeads ref={ref} className="col-span-2" />
-              <Button
-                className="col-span-2"
-                type="submit"
-                loading={addMutation.isPending}
-              >
-                Create
-              </Button>
+              {leadList ? null : (
+                <ImportLeads ref={ref} className="col-span-2" />
+              )}
+              <DialogFooter className="col-span-2">
+                <Button type="submit" loading={addEditMutation.isPending}>
+                  {leadList ? "Update" : "Create"}
+                </Button>
+              </DialogFooter>
             </form>
           </Form>
         </div>
@@ -84,4 +98,4 @@ const AddLeadListModal: FC<IAddLeadListModalProps> = ({ onClose }) => {
   );
 };
 
-export default AddLeadListModal;
+export default AddEditLeadListModal;

@@ -1,7 +1,7 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@web-components/Header";
-import AddLeadListModal from "@web-components/lead-list/AddLeadList";
+import AddLeadEditListModal from "@web-components/lead-list/AddEditLeadList";
 import AddLeadListButton from "@web-components/lead-list/AddLeadListButton";
 import { leadListQueryOptions } from "@web-queries/lead-list.query";
 import { LeadList } from "@web-services/lead-list.service";
@@ -61,7 +61,10 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
         })}
       </div>
       {selectedForEdit ? (
-        <AddLeadListModal onClose={() => setSelectedForEdit(null)} />
+        <AddLeadEditListModal
+          onClose={() => setSelectedForEdit(null)}
+          leadList={selectedForEdit}
+        />
       ) : null}
     </main>
   );

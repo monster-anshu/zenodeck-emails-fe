@@ -3,6 +3,7 @@ import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/dialog";
@@ -177,13 +178,11 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
             {formElements.map((item) => {
               return <FormComponent element={item} key={item.name} />;
             })}
-            <Button
-              className="col-span-2"
-              type="submit"
-              loading={addEditMutation.isPending}
-            >
-              Submit
-            </Button>
+            <DialogFooter className="col-span-2">
+              <Button type="submit" loading={addEditMutation.isPending}>
+                {initialValue ? "Update" : "Create"}
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

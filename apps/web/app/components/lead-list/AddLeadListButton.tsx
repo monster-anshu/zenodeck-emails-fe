@@ -1,6 +1,6 @@
 import { Button } from "@repo/ui/components/button";
 import React, { FC, useState } from "react";
-import AddLeadListModal from "./AddLeadList";
+import AddEditLeadListModal from "./AddEditLeadList";
 
 type IAddLeadListButtonProps = {};
 
@@ -9,7 +9,9 @@ const AddLeadListButton: FC<IAddLeadListButtonProps> = () => {
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>+ Add</Button>
-      {isOpen ? <AddLeadListModal onClose={() => setIsOpen(false)} /> : null}
+      {isOpen ? (
+        <AddEditLeadListModal onClose={() => setIsOpen(false)} />
+      ) : null}
     </>
   );
 };
