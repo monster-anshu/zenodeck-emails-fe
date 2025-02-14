@@ -133,6 +133,7 @@ const Select = <Option, isMulti extends boolean = false>({
         ClearIndicator: () => null,
         DropdownIndicator: (props) => (
           <button
+            type="button"
             className={`px-2 ${error ? "text-destructive" : ""}`}
             onClick={() => {
               if (props.hasValue) {
