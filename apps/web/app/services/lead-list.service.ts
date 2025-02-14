@@ -15,6 +15,11 @@ export class LeadListService {
     const { data } = await client.get<ListResponse>("/lead-list");
     return data;
   }
+
+  static async delete(id: string) {
+    const { data } = await client.delete<unknown>(`/lead-list/${id}`);
+    return data;
+  }
 }
 
 type AddEditRequest = {

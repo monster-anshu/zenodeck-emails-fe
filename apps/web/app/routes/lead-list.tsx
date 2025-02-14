@@ -1,12 +1,22 @@
+import { Button } from "@repo/ui/components/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@repo/ui/components/dialog";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Header from "@web-components/Header";
 import AddLeadEditListModal from "@web-components/lead-list/AddEditLeadList";
 import AddLeadListButton from "@web-components/lead-list/AddLeadListButton";
+import { queryClient } from "@web-providers/react-query";
 import { leadListQueryOptions } from "@web-queries/lead-list.query";
-import { LeadList } from "@web-services/lead-list.service";
+import { LeadList, LeadListService } from "@web-services/lead-list.service";
 import React, { FC, useState } from "react";
 import { LuPenLine, LuTrash2 } from "react-icons/lu";
+import { toast } from "sonner";
 
 type ILeadListPageProps = {};
 
@@ -18,6 +28,22 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
   const [selectedForDelete, setSelectedForDelete] = useState(
     null as null | LeadList
   );
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await LeadListService.delete(id);
+    },
+    onSuccess(_, id) {
+      queryClient.setQueryData(leadListQueryOptions.queryKey, (curr) => {
+        return {
+          isSuccess: true,
+          leadLists: curr?.leadLists.filter((item) => item._id !== id) || [],
+        };
+      });
+      setSelectedForDelete(null);
+      toast.success("Lead list deleted");
+    },
+  });
 
   return (
     <main className="container flex-1 overflow-auto p-4">
@@ -66,6 +92,37 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
           leadList={selectedForEdit}
         />
       ) : null}
+
+      <Dialog
+        open={!!selectedForDelete}
+        onOpenChange={(open) => !open && setSelectedForDelete(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete confirmation</DialogTitle>
+          </DialogHeader>
+          <p>Are you sure to delete credential ?</p>
+          <DialogFooter>
+            <Button
+              variant="secondary"
+              onClick={() => setSelectedForDelete(null)}
+            >
+              No
+            </Button>
+            <Button
+              variant="destructive"
+              loading={deleteMutation.isPending}
+              onClick={() =>
+                selectedForDelete
+                  ? deleteMutation.mutate(selectedForDelete._id)
+                  : null
+              }
+            >
+              Yes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
