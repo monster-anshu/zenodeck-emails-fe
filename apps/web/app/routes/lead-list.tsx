@@ -9,13 +9,8 @@ import {
 import { Dropzone } from "@repo/ui/components/dropzone";
 import { Form, FormField, FormItem, FormLabel } from "@repo/ui/components/form";
 import { Label } from "@repo/ui/components/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+
+import { Select } from "@repo/ui/components/react-select";
 import { FormComponent } from "@repo/ui/molecules/form-component";
 import { useMutation } from "@tanstack/react-query";
 import { LeadListService } from "@web-services/lead-list.service";
@@ -52,7 +47,6 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
   const [headers, setHeaders] = useState([] as string[]);
   const [selectedFile, setSelectedFile] = useState(null as null | File);
   const dataRef = useRef<unknown[]>([]);
-
   const addMutation = useMutation({
     mutationFn: LeadListService.add,
   });
@@ -132,6 +126,11 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
     form.clearErrors(key);
   };
 
+  const headerOptions = headers.map((header) => ({
+    label: header,
+    value: header,
+  }));
+
   return (
     <div>
       <Dialog open>
@@ -164,39 +163,36 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
                     <Label className="col-span-full">Field mapping</Label>
                     {fieldsToMap.map((item) => {
                       const key = `mapping.${item.value}` as const;
-                      const selectedHeader = values.mapping[item.value] || "";
+                      const selectedHeader = values.mapping[item.value] || null;
 
                       return (
                         <FormField
                           control={form.control}
                           name={key}
                           key={key}
-                          render={() => (
+                          render={({ fieldState }) => (
                             <FormItem className="grid grid-cols-[1fr_50px_1fr] items-center gap-2">
                               <FormLabel>
                                 {item.label} {item.required && <span>*</span>}
                               </FormLabel>
                               <FaArrowRightLong />
                               <Select
-                                value={selectedHeader}
-                                onValueChange={(header) =>
-                                  setMapping(item.value, header)
+                                options={headerOptions}
+                                onChange={(value) =>
+                                  setMapping(item.value, value?.value || null)
                                 }
-                              >
-                                <SelectTrigger
-                                  value={selectedHeader}
-                                  onReset={() => setMapping(item.value, null)}
-                                >
-                                  <SelectValue placeholder="Select CSV field" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {headers.map((header) => (
-                                    <SelectItem value={header} key={header}>
-                                      {header}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
+                                error={fieldState.error ? true : false}
+                                placeholder="Select CSV field"
+                                isClearable
+                                value={
+                                  selectedHeader
+                                    ? {
+                                        value: selectedHeader,
+                                        label: selectedHeader,
+                                      }
+                                    : null
+                                }
+                              />
                             </FormItem>
                           )}
                         />
