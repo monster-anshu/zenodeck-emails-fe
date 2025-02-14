@@ -133,7 +133,7 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
 
   return (
     <div>
-      <Dialog open>
+      <Dialog open modal={false}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create lead list</DialogTitle>
@@ -200,6 +200,7 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
                     })}
                   </div>
                 )}
+
                 <Button
                   className="col-span-2"
                   type="submit"

@@ -156,7 +156,7 @@ const Select = <Option, isMulti extends boolean = false>({
         onFocus?.(e);
       }}
       menuPlacement={menuPlacement || "auto"}
-      menuPosition="absolute"
+      menuPosition="fixed"
       menuPortalTarget={typeof window === "undefined" ? null : document.body}
       id={id}
     />
@@ -189,7 +189,7 @@ const DefaultOptionComponent = (
   return (
     <components.Option
       {...props}
-      className="!pointer-events-auto mb-0.5 !flex items-center justify-between gap-2 rounded-sm"
+      className="mb-0.5 !flex items-center justify-between gap-2 rounded-sm"
     >
       <span>{props.label}</span>
       <span>{props.isSelected ? <Check className="h-4 w-4" /> : null}</span>
