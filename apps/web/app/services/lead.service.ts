@@ -12,6 +12,7 @@ export class LeadService {
 
 export type ListLeadRequest = {
   leadListId: string;
+  q?: string;
   limit?: number;
   after?: string;
 };

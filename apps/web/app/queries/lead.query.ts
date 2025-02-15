@@ -3,14 +3,16 @@ import { LeadService, ListLeadRequest } from "@web-services/lead.service";
 
 export const leadsQueryOptions = ({
   leadListId,
-}: Pick<ListLeadRequest, "leadListId">) =>
+  q,
+}: Pick<ListLeadRequest, "leadListId" | "q">) =>
   infiniteQueryOptions({
-    queryKey: ["leads", leadListId],
+    queryKey: ["leads", leadListId, q],
     queryFn: ({ pageParam }: { pageParam?: string }) => {
       return LeadService.list({
         after: pageParam,
         leadListId: leadListId,
         limit: 25,
+        q: q,
       });
     },
     getNextPageParam: (lastPage) => {
