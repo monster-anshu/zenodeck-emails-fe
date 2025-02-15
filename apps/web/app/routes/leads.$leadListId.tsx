@@ -16,6 +16,8 @@ import { useParams } from "react-router";
 
 type ILeadsPagesProps = {};
 
+const LIMIT = 10;
+
 const formatDate = (d: string | Date) => {
   const date = typeof d === "string" ? new Date(d) : d;
   return date.toLocaleDateString();
@@ -23,8 +25,12 @@ const formatDate = (d: string | Date) => {
 
 const LeadsPages: FC<ILeadsPagesProps> = () => {
   const { leadListId } = useParams();
-  const [page, setPage] = useState({} as { after?: string; before?: string });
-  const query = leadsQueryOptions({ ...page, leadListId: leadListId! });
+  const [page, setPage] = useState([] as string[]);
+  const query = leadsQueryOptions({
+    leadListId: leadListId!,
+    after: page.at(-1),
+    limit: LIMIT,
+  });
 
   const { data, isLoading } = useQuery(query);
 
@@ -40,6 +46,7 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
         <Table className="table-fixed">
           <TableHeader>
             <TableRow>
+              <TableHead className="w-16">S. No</TableHead>
               <TableHead className="w-40">First name</TableHead>
               <TableHead className="w-40">Last name</TableHead>
               <TableHead>Email</TableHead>
@@ -49,12 +56,12 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
           </TableHeader>
           <TableBody>
             {isLoading
-              ? Array(10)
+              ? Array(LIMIT)
                   .fill(null)
                   .map((_, i) => {
                     return (
                       <TableRow key={i}>
-                        {Array(5)
+                        {Array(6)
                           .fill(null)
                           .map((_, i) => {
                             return (
@@ -68,9 +75,10 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
                   })
               : null}
 
-            {leads?.map((lead) => {
+            {leads?.map((lead, index) => {
               return (
                 <TableRow key={lead._id}>
+                  <TableCell>{index + 1 + page.length * LIMIT}</TableCell>
                   <TableCell>{lead.firstName}</TableCell>
                   <TableCell>{lead.lastName}</TableCell>
                   <TableCell>{lead.email}</TableCell>
@@ -83,19 +91,19 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        {/* <p>Page {data?.pages.length}</p> */}
+        <p>Page {page.length + 1}</p>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setPage({ before: data?.meta.prevCursor })}
-          disabled={!data?.meta.prevCursor}
+          onClick={() => setPage((curr) => curr.slice(0, curr.length - 1))}
+          disabled={!page.length || isLoading}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setPage({ after: data?.meta.nextCursor })}
+          onClick={() => setPage((curr) => curr.concat(data?.meta.nextCursor!))}
           disabled={!data?.meta.nextCursor}
         >
           Next

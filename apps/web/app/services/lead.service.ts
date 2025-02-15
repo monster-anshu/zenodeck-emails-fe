@@ -21,9 +21,7 @@ export type ListLeadResponse = {
   isSuccess: boolean;
   meta: {
     limit: number;
-    hasNext: boolean;
     nextCursor?: string;
-    prevCursor?: string;
   };
   leads: Lead[];
 };
