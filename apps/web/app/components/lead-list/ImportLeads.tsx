@@ -156,14 +156,7 @@ const ImportLeads = forwardRef<IImportLeadsRef, IImportLeadsProps>(
                     error={error[item.value] ? true : false}
                     placeholder="Select CSV field"
                     isClearable
-                    value={
-                      selectedHeader
-                        ? {
-                            value: selectedHeader,
-                            label: selectedHeader,
-                          }
-                        : null
-                    }
+                    value={selectedHeader}
                   />
                 </React.Fragment>
               );

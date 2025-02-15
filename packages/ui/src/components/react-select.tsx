@@ -1,14 +1,18 @@
 import { Check, ChevronDown, X } from "lucide-react";
 import React, { ReactNode, useId, useMemo } from "react";
 import RSelect, { Props, components } from "react-select";
+import { normalize } from "../lib/normalize";
 
 type SelectOptionTypes = "default" | "checkbox";
-interface ISelectProps<Option, isMulti extends boolean>
-  extends Props<Option, isMulti> {
+type ISelectProps<Option, isMulti extends boolean> = Omit<
+  Props<Option, isMulti>,
+  "value"
+> & {
   error?: ReactNode;
   type?: SelectOptionTypes;
   noBorder?: boolean;
-}
+  value?: isMulti extends true ? Option[] : Option | string | null;
+};
 
 export type BasicOption = {
   label: React.ReactNode;
@@ -25,6 +29,7 @@ const Select = <Option, isMulti extends boolean = false>({
   menuPlacement,
   type = "default",
   noBorder,
+  value,
   ...props
 }: ISelectProps<Option, isMulti>) => {
   let id = useId();
@@ -40,9 +45,23 @@ const Select = <Option, isMulti extends boolean = false>({
     return DefaultOptionComponent;
   }, [type]);
 
+  const valueToPass = useMemo(() => {
+    if (typeof value === "object") {
+      return value;
+    }
+    if (typeof value === "string") {
+      const optionRecord = normalize(
+        (props.options as unknown as BasicOption[]) || [],
+        "value"
+      );
+      return optionRecord[value];
+    }
+  }, [value]);
+
   return (
     <RSelect
       {...props}
+      value={valueToPass as Option}
       isMulti={isMulti}
       classNames={{
         control: () => "!shadow-none text-sm py-0",
