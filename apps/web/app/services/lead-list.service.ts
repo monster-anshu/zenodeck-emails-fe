@@ -1,6 +1,11 @@
 import { client } from "./client";
 
 export class LeadListService {
+  static async get(leadListId: string) {
+    const { data } = await client.get<GetResponse>(`/lead-list/${leadListId}`);
+    return data;
+  }
+
   static async addEdit(body: AddEditRequest) {
     const { data } = await client<AddEditReposne>({
       method: !body.id ? "POST" : "PATCH",
@@ -20,6 +25,11 @@ export class LeadListService {
     const { data } = await client.delete<unknown>(`/lead-list/${id}`);
     return data;
   }
+
+  static async import(body: ImportLeadsRequest) {
+    const { data } = await client.post<unknown>(`/lead-list/import-lead`, body);
+    return data;
+  }
 }
 
 type AddEditRequest = {
@@ -35,6 +45,16 @@ type AddEditReposne = {
 type ListResponse = {
   isSuccess: boolean;
   leadLists: LeadList[];
+};
+
+type GetResponse = {
+  isSuccess: boolean;
+  leadList: LeadList;
+};
+
+export type ImportLeadsRequest = {
+  leadListId: string;
+  leads: Record<string, string>[];
 };
 
 export type LeadList = {

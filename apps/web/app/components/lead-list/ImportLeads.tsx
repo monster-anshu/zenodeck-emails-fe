@@ -9,6 +9,7 @@ import React, {
   useState,
 } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { toast } from "sonner";
 
 type IImportLeadsProps = {
   className?: string;
@@ -51,6 +52,9 @@ const ImportLeads = forwardRef<IImportLeadsRef, IImportLeadsProps>(
       Papa.parse(file, {
         header: true,
         complete: function (results) {
+          if (results.errors.length) {
+            toast.warning("CSV has some errors");
+          }
           setSelectedFile(file);
           dataRef.current = results.data;
           const headers = results.meta.fields;
@@ -128,7 +132,7 @@ const ImportLeads = forwardRef<IImportLeadsRef, IImportLeadsProps>(
       <div className={className}>
         {!selectedFile && (
           <div className="grid gap-2">
-            <Label>Import lead list </Label>
+            <Label>Import CSV file</Label>
             <Dropzone onFileSelect={handleFileSelect} />
           </div>
         )}

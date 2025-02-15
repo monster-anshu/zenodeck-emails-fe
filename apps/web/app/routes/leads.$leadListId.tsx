@@ -1,4 +1,6 @@
 import { Button } from "@repo/ui/components/button";
+
+import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
   Table,
@@ -10,6 +12,8 @@ import {
 } from "@repo/ui/components/table";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@web-components/Header";
+import ImportLeadsDialog from "@web-components/lead-list/ImportLeadsDialog";
+import { leadListQuery } from "@web-queries/lead-list.query";
 import { leadsQueryOptions } from "@web-queries/lead.query";
 import { FC, useState } from "react";
 import { useParams } from "react-router";
@@ -25,24 +29,44 @@ const formatDate = (d: string | Date) => {
 
 const LeadsPages: FC<ILeadsPagesProps> = () => {
   const { leadListId } = useParams();
+
+  if (!leadListId) {
+    throw new Error("leadListId required");
+  }
+
+  const [importLead, setImportLead] = useState(false);
   const [page, setPage] = useState([] as string[]);
   const query = leadsQueryOptions({
-    leadListId: leadListId!,
+    leadListId: leadListId,
     after: page.at(-1),
     limit: LIMIT,
   });
 
   const { data, isLoading } = useQuery(query);
+  const leadListQueryResult = useQuery(leadListQuery(leadListId));
 
   const leads = data?.leads;
 
   return (
     <main className="container flex-1 overflow-auto p-4">
       <Header
-        location={[{ label: "Leads", link: `/leads/${leadListId}` }]}
-        rightSection={<Button>Add lead</Button>}
+        location={[
+          {
+            label: leadListQueryResult.isPending ? (
+              <Skeleton className="w-40" />
+            ) : (
+              <>{leadListQueryResult.data?.leadList.name}</>
+            ),
+            link: `/leads/${leadListId}`,
+          },
+        ]}
+        rightSection={
+          <Button onClick={() => setImportLead(true)}>Import lead</Button>
+        }
       />
-      <div className="mt-4 space-y-2 rounded-md border">
+
+      <Label className="mt-4 block">Leads</Label>
+      <div className="mt-2 space-y-2 rounded-md border">
         <Table className="table-fixed">
           <TableHeader>
             <TableRow>
@@ -109,6 +133,12 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
           Next
         </Button>
       </div>
+      {importLead && (
+        <ImportLeadsDialog
+          leadListId={leadListId}
+          onClose={() => setImportLead(false)}
+        />
+      )}
     </main>
   );
 };

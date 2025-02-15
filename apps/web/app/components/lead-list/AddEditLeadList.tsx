@@ -63,7 +63,7 @@ const AddEditLeadListModal: FC<IAddEditLeadListModalProps> = ({
   }
 
   return (
-    <Dialog modal={false} open onOpenChange={(open) => !open && onClose()}>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
