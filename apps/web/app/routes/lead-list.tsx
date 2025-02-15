@@ -15,7 +15,8 @@ import { queryClient } from "@web-providers/react-query";
 import { leadListQueryOptions } from "@web-queries/lead-list.query";
 import { LeadList, LeadListService } from "@web-services/lead-list.service";
 import React, { FC, useState } from "react";
-import { LuPenLine, LuTrash2 } from "react-icons/lu";
+import { LuEye, LuPenLine, LuTrash2 } from "react-icons/lu";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
 type ILeadListPageProps = {};
@@ -70,14 +71,19 @@ const LeadListPage: FC<ILeadListPageProps> = () => {
                   {leadList.name}
                 </button>
               </div>
+              <Link to={`/leads/${leadList._id}`}>
+                <button aria-label="View lead">
+                  <LuEye />
+                </button>
+              </Link>
               <button
-                aria-label="Edit credential"
+                aria-label="Edit lead list"
                 onClick={() => setSelectedForEdit(leadList)}
               >
                 <LuPenLine />
               </button>
               <button
-                aria-label="Delete credential"
+                aria-label="Delete lead list"
                 onClick={() => setSelectedForDelete(leadList)}
               >
                 <LuTrash2 />
