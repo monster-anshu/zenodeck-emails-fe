@@ -1,14 +1,10 @@
-import { infiniteQueryOptions } from "@tanstack/react-query";
-import { LeadService } from "@web-services/lead.service";
+import { queryOptions } from "@tanstack/react-query";
+import { LeadService, ListLeadRequest } from "@web-services/lead.service";
 
-export const leadsQueryOptions = (leadListId: string) =>
-  infiniteQueryOptions({
-    queryKey: ["leads", leadListId],
-    queryFn: ({ pageParam }: { pageParam: string | null }) => {
-      return LeadService.list({ after: pageParam || undefined, leadListId });
+export const leadsQueryOptions = (params: ListLeadRequest) =>
+  queryOptions({
+    queryKey: ["leads", params],
+    queryFn: () => {
+      return LeadService.list(params);
     },
-    getNextPageParam: (last) => {
-      return last.meta.nextCursor;
-    },
-    initialPageParam: null,
   });
