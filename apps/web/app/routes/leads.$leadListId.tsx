@@ -1,5 +1,5 @@
 import { Button } from "@repo/ui/components/button";
-
+import { InfiniteScroll } from "@repo/ui/components/infinite-scroll";
 import { Label } from "@repo/ui/components/label";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import {
@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@repo/ui/components/table";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import Header from "@web-components/Header";
 import ImportLeadsDialog from "@web-components/lead-list/ImportLeadsDialog";
 import { leadListQuery } from "@web-queries/lead-list.query";
@@ -20,7 +20,7 @@ import { useParams } from "react-router";
 
 type ILeadsPagesProps = {};
 
-const LIMIT = 10;
+const LIMIT = 25;
 
 const formatDate = (d: string | Date) => {
   const date = typeof d === "string" ? new Date(d) : d;
@@ -35,17 +35,16 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
   }
 
   const [importLead, setImportLead] = useState(false);
-  const [page, setPage] = useState([] as string[]);
   const query = leadsQueryOptions({
     leadListId: leadListId,
-    after: page.at(-1),
-    limit: LIMIT,
   });
 
-  const { data, isLoading } = useQuery(query);
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery(query);
+
   const leadListQueryResult = useQuery(leadListQuery(leadListId));
 
-  const leads = data?.leads;
+  const leads = data?.pages.map((page) => page.leads).flat();
 
   return (
     <main className="container flex-1 overflow-auto p-4">
@@ -79,7 +78,26 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading
+            <InfiniteScroll
+              hasMore={hasNextPage}
+              isLoading={isFetchingNextPage}
+              next={() => fetchNextPage()}
+            >
+              {leads?.map((lead, index) => {
+                return (
+                  <TableRow key={lead._id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{lead.firstName}</TableCell>
+                    <TableCell>{lead.lastName}</TableCell>
+                    <TableCell>{lead.email}</TableCell>
+                    <TableCell>{formatDate(lead.createdAt)}</TableCell>
+                    <TableCell>{formatDate(lead.updatedAt)}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </InfiniteScroll>
+
+            {isLoading || isFetchingNextPage
               ? Array(LIMIT)
                   .fill(null)
                   .map((_, i) => {
@@ -98,40 +116,8 @@ const LeadsPages: FC<ILeadsPagesProps> = () => {
                     );
                   })
               : null}
-
-            {leads?.map((lead, index) => {
-              return (
-                <TableRow key={lead._id}>
-                  <TableCell>{index + 1 + page.length * LIMIT}</TableCell>
-                  <TableCell>{lead.firstName}</TableCell>
-                  <TableCell>{lead.lastName}</TableCell>
-                  <TableCell>{lead.email}</TableCell>
-                  <TableCell>{formatDate(lead.createdAt)}</TableCell>
-                  <TableCell>{formatDate(lead.updatedAt)}</TableCell>
-                </TableRow>
-              );
-            })}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <p>Page {page.length + 1}</p>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setPage((curr) => curr.slice(0, curr.length - 1))}
-          disabled={!page.length || isLoading}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setPage((curr) => curr.concat(data?.meta.nextCursor!))}
-          disabled={!data?.meta.nextCursor}
-        >
-          Next
-        </Button>
       </div>
       {importLead && (
         <ImportLeadsDialog

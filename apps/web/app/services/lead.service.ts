@@ -14,7 +14,6 @@ export type ListLeadRequest = {
   leadListId: string;
   limit?: number;
   after?: string;
-  before?: string;
 };
 
 export type ListLeadResponse = {
