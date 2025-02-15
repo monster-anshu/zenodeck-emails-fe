@@ -8,60 +8,50 @@ import {
 } from "@repo/ui/components/dialog";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import AddCredentialButton from "@web-components/credential/AddCredentialButton";
-import AddEditCredentialModal from "@web-components/credential/AddEditCredentialModal";
 import Header from "@web-components/Header";
+import AddLeadEditListModal from "@web-components/lead-list/AddEditLeadList";
+import AddLeadListButton from "@web-components/lead-list/AddLeadListButton";
 import { queryClient } from "@web-providers/react-query";
-import { credentialQueryOptions } from "@web-queries/credential.query";
-import {
-  Credential,
-  CredentialService,
-} from "@web-services/credential.service";
+import { leadListQueryOptions } from "@web-queries/lead-list.query";
+import { LeadList, LeadListService } from "@web-services/lead-list.service";
 import { FC, useState } from "react";
-import { LuMail, LuPenLine, LuTrash2 } from "react-icons/lu";
-import { SiResend } from "react-icons/si";
+import { LuEye, LuPenLine, LuTrash2 } from "react-icons/lu";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
-type ICredentialPageProps = {};
-const CredentialPage: FC<ICredentialPageProps> = () => {
-  const [selectedForEditCredential, setSelectedForEdit] = useState(
-    null as null | Credential
+type ILeadListPageProps = {};
+
+const LeadListPage: FC<ILeadListPageProps> = () => {
+  const { data, isLoading } = useQuery(leadListQueryOptions);
+  const [selectedForEdit, setSelectedForEdit] = useState(
+    null as null | LeadList
   );
   const [selectedForDelete, setSelectedForDelete] = useState(
-    null as null | Credential
+    null as null | LeadList
   );
-  const { data, isLoading } = useQuery(credentialQueryOptions);
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      await CredentialService.delete(id);
+      await LeadListService.delete(id);
     },
     onSuccess(_, id) {
-      queryClient.setQueryData(credentialQueryOptions.queryKey, (curr) => {
+      queryClient.setQueryData(leadListQueryOptions.queryKey, (curr) => {
         return {
-          ...curr,
-          credentials:
-            curr?.credentials.filter((item) => item._id !== id) || [],
+          isSuccess: true,
+          leadLists: curr?.leadLists.filter((item) => item._id !== id) || [],
         };
       });
       setSelectedForDelete(null);
-      toast.success("Credential deleted");
+      toast.success("Lead list deleted");
     },
   });
 
   return (
     <main className="container flex-1 overflow-auto p-4">
       <Header
-        location={[{ label: "Credential", link: "/credential" }]}
-        rightSection={<AddCredentialButton />}
+        location={[{ label: "Lead list", link: "/lead-list" }]}
+        rightSection={<AddLeadListButton />}
       />
-      {selectedForEditCredential && (
-        <AddEditCredentialModal
-          credential={selectedForEditCredential}
-          onClose={() => setSelectedForEdit(null)}
-        />
-      )}
-
       <div className="mt-4 space-y-2">
         {isLoading &&
           Array(10)
@@ -69,30 +59,32 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
             .map((_, i) => {
               return <Skeleton key={i} className="h-12" />;
             })}
-        {data?.credentials.map((credential) => {
+
+        {data?.leadLists.map((leadList) => {
           return (
             <div
-              key={credential._id}
+              key={leadList._id}
               className="flex items-center gap-2 rounded-lg border p-4"
             >
-              <div>
-                {credential.type === "RESEND_API" && <SiResend />}
-                {credential.type === "SMTP" && <LuMail />}
-              </div>
               <div className="flex-1">
-                <button onClick={() => setSelectedForEdit(credential)}>
-                  {credential.name}
+                <button onClick={() => setSelectedForEdit(leadList)}>
+                  {leadList.name}
                 </button>
               </div>
+              <Link to={`/leads/${leadList._id}`}>
+                <button aria-label="View lead">
+                  <LuEye />
+                </button>
+              </Link>
               <button
-                aria-label="Edit credential"
-                onClick={() => setSelectedForEdit(credential)}
+                aria-label="Edit lead list"
+                onClick={() => setSelectedForEdit(leadList)}
               >
                 <LuPenLine />
               </button>
               <button
-                aria-label="Delete credential"
-                onClick={() => setSelectedForDelete(credential)}
+                aria-label="Delete lead list"
+                onClick={() => setSelectedForDelete(leadList)}
               >
                 <LuTrash2 />
               </button>
@@ -100,6 +92,12 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
           );
         })}
       </div>
+      {selectedForEdit ? (
+        <AddLeadEditListModal
+          onClose={() => setSelectedForEdit(null)}
+          leadList={selectedForEdit}
+        />
+      ) : null}
 
       <Dialog
         open={!!selectedForDelete}
@@ -135,4 +133,4 @@ const CredentialPage: FC<ICredentialPageProps> = () => {
   );
 };
 
-export default CredentialPage;
+export default LeadListPage;

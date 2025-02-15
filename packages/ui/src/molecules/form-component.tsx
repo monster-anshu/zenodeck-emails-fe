@@ -6,13 +6,7 @@ import {
   FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@repo/ui/components/select";
+import { BasicOption, Select } from "@repo/ui/components/react-select";
 import { cn } from "@repo/ui/lib/utils";
 import { useFormContext } from "react-hook-form";
 import { z, ZodSchema } from "zod";
@@ -70,25 +64,13 @@ const FormComponent = <Element extends FormElement<z.ZodAny>>({
         render={({ field }) => (
           <FormItem className={cn("col-span-2", item.className)}>
             <FormLabel>{item.label}</FormLabel>
-            <Select onValueChange={field.onChange} value={field.value || ""}>
-              <FormControl>
-                <SelectTrigger
-                  value={field.value || ""}
-                  onReset={() => field.onChange(undefined)}
-                >
-                  <SelectValue placeholder={item.placeholder} />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {item.options.map((option) => {
-                  return (
-                    <SelectItem value={option.value} key={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+            <Select
+              options={item.options}
+              value={field.value as string}
+              onChange={(option) => field.onChange(option?.value)}
+              placeholder={item.placeholder}
+              onBlur={field.onBlur}
+            />
             <FormMessage />
           </FormItem>
         )}
@@ -104,11 +86,6 @@ export { FormComponent };
 // types
 import type { ReactNode } from "react";
 
-export type Option = {
-  label: ReactNode;
-  value: string;
-};
-
 export type FormElement<T extends ZodSchema> = Record<string, unknown> & {
   name: keyof z.infer<T>;
   label: ReactNode;
@@ -118,6 +95,6 @@ export type FormElement<T extends ZodSchema> = Record<string, unknown> & {
   hide?: boolean;
 } & (
     | { type: "text" | "email" | "password"; regex?: RegExp }
-    | { type: "select"; options: Option[] }
+    | { type: "select"; options: BasicOption[] }
     | { type: "file"; module?: string }
   );

@@ -3,6 +3,7 @@ import { Button } from "@repo/ui/components/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@repo/ui/components/dialog";
@@ -19,6 +20,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { LuMail } from "react-icons/lu";
 import { SiResend } from "react-icons/si";
+import { toast } from "sonner";
 import { z } from "zod";
 
 type IAddEditCredentialModalProps = {
@@ -100,6 +102,9 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
           credentials: curr.credentials.concat(credential),
         };
       });
+      toast.success(
+        initialValue ? "Createndial updated" : "Createndial created"
+      );
       onClose();
     },
   });
@@ -177,13 +182,11 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
             {formElements.map((item) => {
               return <FormComponent element={item} key={item.name} />;
             })}
-            <Button
-              className="col-span-2"
-              type="submit"
-              loading={addEditMutation.isPending}
-            >
-              Submit
-            </Button>
+            <DialogFooter className="col-span-2">
+              <Button type="submit" loading={addEditMutation.isPending}>
+                {initialValue ? "Update" : "Create"}
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

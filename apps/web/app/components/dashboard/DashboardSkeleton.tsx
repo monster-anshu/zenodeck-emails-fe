@@ -13,29 +13,29 @@ const DashboardSkeleton: FC<IDashboardSkeletonProps> = () => {
       }}
     >
       <DashboardCard className="p-0">
-        <Skeleton className="h-[75px]" />
+        <Skeleton className="h-[75px]" variant="shine" />
       </DashboardCard>
       <DashboardCard className="p-0">
-        <Skeleton className="h-[75px]" />
+        <Skeleton className="h-[75px]" variant="shine" />
       </DashboardCard>
       <DashboardCard className="p-0">
-        <Skeleton className="h-[75px]" />
+        <Skeleton className="h-[75px]" variant="shine" />
       </DashboardCard>
       <DashboardCard className="p-0">
-        <Skeleton className="h-[75px]" />
+        <Skeleton className="h-[75px]" variant="shine" />
       </DashboardCard>
       <DashboardCard className="p-0">
-        <Skeleton className="h-[75px]" />
+        <Skeleton className="h-[75px]" variant="shine" />
       </DashboardCard>
 
-      <DashboardCard className="col-span-full h-72">
-        <Skeleton className="h-full" />
+      <DashboardCard className="col-span-full h-72 p-0">
+        <Skeleton className="h-full" variant="shine" />
       </DashboardCard>
-      <DashboardCard className="col-span-full h-72">
-        <Skeleton className="h-full" />
+      <DashboardCard className="col-span-full h-72 p-0">
+        <Skeleton className="h-full" variant="shine" />
       </DashboardCard>
-      <DashboardCard className="col-span-full h-72">
-        <Skeleton className="h-full" />
+      <DashboardCard className="col-span-full h-72 p-0">
+        <Skeleton className="h-full" variant="shine" />
       </DashboardCard>
     </main>
   );

@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React, { FC } from "react";
+import { toast } from "sonner";
 
 export interface IReactQueryProviderProps {
   children: React.ReactNode;
@@ -12,6 +13,11 @@ export const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       retry: false,
       retryOnMount: false,
+    },
+    mutations: {
+      onError(error) {
+        toast.error(error.message || "Something went wrong");
+      },
     },
   },
 });

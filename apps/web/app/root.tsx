@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Toaster } from "sonner";
 import type { Route } from "./+types/root";
 
 import sharedCss from "@repo/ui/style.css?url";
@@ -66,6 +67,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </AuthProvider>
         </ReactQueryProvider>
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
       </body>

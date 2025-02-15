@@ -4,7 +4,9 @@ import * as React from "react";
 
 import { cn } from "@repo/ui/lib/utils";
 
-const Dialog = DialogPrimitive.Root;
+const Dialog = (props: React.ComponentProps<typeof DialogPrimitive.Root>) => (
+  <DialogPrimitive.Root modal={false} {...props} />
+);
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
@@ -33,6 +35,7 @@ const DialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
+    <div className="data-[state=open]:animate-overlayShow fixed inset-0 z-50 grid items-center overflow-y-auto bg-black/30" />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
