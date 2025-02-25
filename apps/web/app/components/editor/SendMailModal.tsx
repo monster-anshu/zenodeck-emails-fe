@@ -10,7 +10,7 @@ import { Form } from "@repo/ui/components/form";
 import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { credentialQueryOptions } from "@web-queries/credential.query";
-import { MailService } from "@web-services/main.service";
+import { MailService } from "@web-services/mail.service";
 import type { Editor } from "grapesjs";
 import React, { FC, RefObject } from "react";
 import { useForm } from "react-hook-form";
