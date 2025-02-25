@@ -24,9 +24,13 @@ export const linkes = [
     link: "/lead-list",
   },
   {
-    label: "Settings",
-    link: "/settings",
+    label: "Campaign",
+    link: "/campaign",
   },
+  // {
+  //   label: "Settings",
+  //   link: "/settings",
+  // },
 ];
 
 const Sidebar: FC<ISidebarProps> = () => {
