@@ -1,9 +1,11 @@
+import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@web-components/Header";
 import { campaignListQueryOptions } from "@web-queries/campaign.query";
 import { FC } from "react";
 import { LuPenLine, LuTrash2 } from "react-icons/lu";
+import { Link } from "react-router";
 
 type ICampaignPageProps = {};
 
@@ -13,7 +15,11 @@ const CampaignPage: FC<ICampaignPageProps> = () => {
     <main className="container flex-1 overflow-auto p-4">
       <Header
         location={[{ label: "Campaign", link: "/campaign" }]}
-        // rightSection={<AddCredentialButton />}
+        rightSection={
+          <Link to={"/campaign/add"}>
+            <Button>+ Add Campaign</Button>
+          </Link>
+        }
       />
 
       <div className="mt-4 space-y-2">
