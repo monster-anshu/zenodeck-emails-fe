@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@repo/ui/lib/utils";
-import { Eye, EyeOff } from "lucide-react";
+import { Calendar, Eye, EyeOff } from "lucide-react";
 
 type InputProps = React.ComponentProps<"input"> & {
   hideIcon?: boolean;
@@ -34,6 +34,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       type = show ? "text" : "password";
     }
 
+    if ((type === "datetime-local" || type === "date") && !icon) {
+      icon = {
+        children: <Calendar size={14} />,
+        position: "right",
+        onClick: () => {
+          const inputEle = document.getElementById(id) as HTMLInputElement;
+          if (!inputEle) return;
+          inputEle.showPicker();
+        },
+      };
+    }
+
     return (
       <div className={cn("relative w-full", containerClassName)}>
         <input
@@ -41,7 +53,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           id={id}
           className={cn(
-            "border-input file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+            "border-input file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring block h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
             showIcon && "pr-8",
             icon?.position === "left" && "pl-8",
             icon?.position === "right" && "pr-8",
@@ -67,17 +79,20 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </button>
         )}
         {icon && (
-          <button
-            {...icon}
-            className={cn(
-              "absolute right-2 top-1/2 w-fit -translate-y-1/2",
-              icon.position === "left" && "left-2",
-              icon.position === "right" && "right-2",
-              icon.className
-            )}
-          >
-            {icon.children}
-          </button>
+          <label htmlFor={id}>
+            <button
+              {...icon}
+              type="button"
+              className={cn(
+                "absolute right-2 top-1/2 w-fit -translate-y-1/2",
+                icon.position === "left" && "left-2",
+                icon.position === "right" && "right-2",
+                icon.className
+              )}
+            >
+              {icon.children}
+            </button>
+          </label>
         )}
       </div>
     );

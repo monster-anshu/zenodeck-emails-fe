@@ -5,6 +5,15 @@ export class CampaignService {
     const { data } = await client.get<CampaignListResponse>("/campaign");
     return data;
   }
+
+  static async addEdit({ id, ...body }: AddEditCampiagnRequest) {
+    const { data } = await client<AddEditResponse>({
+      method: id ? "PATCH" : "POST",
+      data: body,
+      url: "/campaign",
+    });
+    return data;
+  }
 }
 
 export type Campaign = {
@@ -26,4 +35,21 @@ export type Campaign = {
 
 type CampaignListResponse = {
   campaigns: Campaign[];
+};
+
+type AddEditCampiagnRequest = {
+  id?: string;
+  name: string;
+  credentialId: string;
+  leadListId: string;
+  time: Date;
+  from: string;
+  subject: string;
+  projectData: string;
+  description?: string;
+  senderName?: string;
+};
+
+type AddEditResponse = {
+  campaign: Campaign;
 };

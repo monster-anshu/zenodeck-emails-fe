@@ -9,15 +9,18 @@ import {
 } from "@repo/ui/components/dialog";
 import { Form } from "@repo/ui/components/form";
 import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { credentialQueryOptions } from "@web-queries/credential.query";
 import { leadListQueryOptions } from "@web-queries/lead-list.query";
-import { FC } from "react";
+import { CampaignService } from "@web-services/campaign.service";
+import type { Editor } from "grapesjs";
+import { FC, RefObject } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type IAddEditCampaignModalProps = {
   onClose: () => void;
+  editorRef: RefObject<Editor | null>;
 };
 
 const schema = z.object({
@@ -27,10 +30,32 @@ const schema = z.object({
   leadListId: z.string(),
   name: z.string().trim().nonempty(),
   senderName: z.string(),
-  time: z.string(),
+  subject: z.string(),
+  time: z.string().refine((value) => {
+    const date = Math.round(new Date(value).getTime());
+    const nextCron = Math.round(timeUntilNextCron().getTime());
+    if (date < nextCron) {
+      return false;
+    }
+    return true;
+  }),
 });
 
-const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({ onClose }) => {
+const minDateString = () => {
+  const now = new Date();
+  const date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const time = timeUntilNextCron()
+    .toLocaleTimeString("en-US", {
+      hour12: false,
+    })
+    .substring(0, 5);
+  return date + "T" + time;
+};
+
+const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
+  onClose,
+  editorRef,
+}) => {
   const credentialQuery = useQuery(credentialQueryOptions);
   const leadListQuery = useQuery(leadListQueryOptions);
 
@@ -41,21 +66,47 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({ onClose }) => {
       from: "",
       name: "",
       senderName: "",
+      time: minDateString(),
+      subject: "",
     },
+  });
+
+  const addEditMutation = useMutation({
+    mutationFn: CampaignService.addEdit,
   });
 
   const formElements = [
     {
+      name: "time",
+      label: "Date and time",
+      type: "datetime-local",
+      min: minDateString(),
+    },
+    {
       name: "name",
-      label: "Name",
+      label: "Campaign name",
       placeholder: "Marketing campaign",
       type: "text",
     },
     {
+      name: "senderName",
+      label: "Sender's name",
+      placeholder: "John doe",
+      type: "text",
+      className: "col-span-1",
+    },
+    {
       name: "from",
-      label: "Email to send from",
+      label: "Sender's email",
       placeholder: "campany@example.com",
       type: "email",
+      className: "col-span-1",
+    },
+    {
+      name: "subject",
+      label: "Subject",
+      placeholder: "Discount...",
+      type: "text",
     },
     {
       name: "description",
@@ -88,15 +139,24 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({ onClose }) => {
     },
   ] satisfies FormElement<typeof schema>[];
 
+  function onSubmit(values: z.infer<typeof schema>) {
+    addEditMutation.mutate({
+      ...values,
+      projectData: JSON.stringify(editorRef.current.getProjectData()),
+      time: new Date(values.time),
+    });
+  }
+
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add campaign</DialogTitle>
         </DialogHeader>
+
         <Form {...form}>
           <form
-            // onSubmit={form.handleSubmit(onSubmit as never)}
+            onSubmit={form.handleSubmit(onSubmit as never)}
             className="grid grid-cols-2 gap-3"
           >
             {formElements.map((item) => {
@@ -113,3 +173,24 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({ onClose }) => {
 };
 
 export default AddEditCampaignModal;
+
+function timeUntilNextCron() {
+  const now = new Date();
+  const minutes = now.getMinutes();
+
+  // Find next quarter-hour mark (15, 30, 45, 0)
+  const nextMinutes = Math.ceil(minutes / 15) * 15;
+
+  const nextRun = new Date(now);
+  nextRun.setMinutes(nextMinutes);
+  nextRun.setSeconds(0);
+  nextRun.setMilliseconds(0);
+
+  // If next run exceeds 60 minutes, adjust to next hour
+  if (nextMinutes === 60) {
+    nextRun.setHours(nextRun.getHours() + 1);
+    nextRun.setMinutes(0);
+  }
+
+  return nextRun;
+}

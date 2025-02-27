@@ -2,7 +2,7 @@ import EmailEditor from "@repo/email-editor/Editor";
 import AddEditCampaignModal from "@web-components/campaign/AddEditCampaignModal";
 import FileService from "@web-services/file.service";
 import type { Editor } from "grapesjs";
-import React, { FC, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import { LuSend } from "react-icons/lu";
 import type { Route } from "./+types/campaign_.add";
 
@@ -36,7 +36,7 @@ const AddCampaignPage: FC<IAddCampaignPageProps> = () => {
         editorRef={ref}
         className="h-full w-full"
       />
-      <AddEditCampaignModal onClose={() => setSave(false)} />
+      <AddEditCampaignModal editorRef={ref} onClose={() => setSave(false)} />
     </main>
   );
 };

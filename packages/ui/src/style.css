@@ -54,3 +54,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
