@@ -8,7 +8,7 @@ const AddCredentialButton: FC<IAddCredentialButtonProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>+ Add</Button>
+      <Button onClick={() => setIsOpen(true)}>+ Add Credential</Button>
       {isOpen ? (
         <AddEditCredentialModal onClose={() => setIsOpen(false)} />
       ) : null}

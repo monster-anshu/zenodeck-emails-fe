@@ -6,13 +6,18 @@ export class CampaignService {
     return data;
   }
 
-  static async addEdit({ id, ...body }: AddEditCampiagnRequest) {
+  static async addEdit({ id, ...body }: AddEditCampaignRequest) {
     const { data } = await client<AddEditResponse>({
       method: id ? "PATCH" : "POST",
       data: body,
       url: "/campaign",
     });
     return data;
+  }
+
+  static async get(id: string) {
+    const { data } = await client.get<GetResponse>(`/campaign/${id}`);
+    return data.campaign;
   }
 }
 
@@ -37,7 +42,7 @@ type CampaignListResponse = {
   campaigns: Campaign[];
 };
 
-type AddEditCampiagnRequest = {
+type AddEditCampaignRequest = {
   id?: string;
   name: string;
   credentialId: string;
@@ -51,5 +56,9 @@ type AddEditCampiagnRequest = {
 };
 
 type AddEditResponse = {
+  campaign: Campaign;
+};
+
+type GetResponse = {
   campaign: Campaign;
 };

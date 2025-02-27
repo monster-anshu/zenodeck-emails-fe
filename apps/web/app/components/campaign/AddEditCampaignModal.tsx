@@ -12,7 +12,7 @@ import { FormComponent, FormElement } from "@repo/ui/molecules/form-component";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { credentialQueryOptions } from "@web-queries/credential.query";
 import { leadListQueryOptions } from "@web-queries/lead-list.query";
-import { CampaignService } from "@web-services/campaign.service";
+import { Campaign, CampaignService } from "@web-services/campaign.service";
 import type { Editor } from "grapesjs";
 import { FC, RefObject } from "react";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,7 @@ import { z } from "zod";
 type IAddEditCampaignModalProps = {
   onClose: () => void;
   editorRef: RefObject<Editor | null>;
+  campaign?: Campaign;
 };
 
 const schema = z.object({
@@ -41,20 +42,24 @@ const schema = z.object({
   }),
 });
 
-const minDateString = () => {
-  const now = new Date();
-  const date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-  const time = timeUntilNextCron()
+const formatForInput = (date: Date) => {
+  const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  const timeStr = date
     .toLocaleTimeString("en-US", {
       hour12: false,
     })
     .substring(0, 5);
-  return date + "T" + time;
+  return dateStr + "T" + timeStr;
+};
+
+const minDateString = () => {
+  return formatForInput(timeUntilNextCron());
 };
 
 const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
   onClose,
   editorRef,
+  campaign,
 }) => {
   const credentialQuery = useQuery(credentialQueryOptions);
   const leadListQuery = useQuery(leadListQueryOptions);
@@ -62,12 +67,14 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      description: "",
-      from: "",
-      name: "",
-      senderName: "",
-      time: minDateString(),
-      subject: "",
+      description: campaign?.description || "",
+      from: campaign?.from || "",
+      name: campaign?.name || "",
+      senderName: campaign?.senderName || "",
+      subject: campaign?.subject || "",
+      time: campaign?.time
+        ? formatForInput(new Date(campaign.time))
+        : minDateString(),
     },
   });
 
@@ -142,7 +149,7 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
   function onSubmit(values: z.infer<typeof schema>) {
     addEditMutation.mutate({
       ...values,
-      projectData: JSON.stringify(editorRef.current.getProjectData()),
+      projectData: JSON.stringify(editorRef.current?.getProjectData()),
       time: new Date(values.time),
     });
   }
@@ -153,7 +160,6 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
         <DialogHeader>
           <DialogTitle>Add campaign</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit as never)}

@@ -38,9 +38,11 @@ const CampaignPage: FC<ICampaignPageProps> = () => {
               <div className="flex-1">
                 <button onClick={() => null}>{campaign.name}</button>
               </div>
-              <button aria-label="Edit campaign" onClick={() => null}>
-                <LuPenLine />
-              </button>
+              <Link to={`/campaign/${campaign._id}`}>
+                <button aria-label="Edit campaign" onClick={() => null}>
+                  <LuPenLine />
+                </button>
+              </Link>
               <button aria-label="Delete campaign" onClick={() => null}>
                 <LuTrash2 />
               </button>

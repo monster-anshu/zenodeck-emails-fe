@@ -3,7 +3,7 @@ import AddEditCampaignModal from "@web-components/campaign/AddEditCampaignModal"
 import FileService from "@web-services/file.service";
 import type { Editor } from "grapesjs";
 import { FC, useRef, useState } from "react";
-import { LuSend } from "react-icons/lu";
+import { LuSaveAll } from "react-icons/lu";
 import type { Route } from "./+types/campaign_.add";
 
 export function meta({}: Route.MetaArgs) {
@@ -14,7 +14,7 @@ type IAddCampaignPageProps = {};
 
 const AddCampaignPage: FC<IAddCampaignPageProps> = () => {
   const ref = useRef<Editor>(null);
-  const [save, setSave] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <main className="flex-1">
@@ -22,10 +22,10 @@ const AddCampaignPage: FC<IAddCampaignPageProps> = () => {
         variables={[]}
         extraActions={[
           {
-            icon: <LuSend />,
+            icon: <LuSaveAll />,
             id: "send",
             onClick: () => {
-              setSave(true);
+              setOpen(true);
             },
           },
         ]}
@@ -36,7 +36,9 @@ const AddCampaignPage: FC<IAddCampaignPageProps> = () => {
         editorRef={ref}
         className="h-full w-full"
       />
-      <AddEditCampaignModal editorRef={ref} onClose={() => setSave(false)} />
+      {open && (
+        <AddEditCampaignModal editorRef={ref} onClose={() => setOpen(false)} />
+      )}
     </main>
   );
 };
