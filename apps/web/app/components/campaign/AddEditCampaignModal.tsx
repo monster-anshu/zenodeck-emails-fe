@@ -155,6 +155,7 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
         ? JSON.stringify(editorRef?.current?.getProjectData())
         : undefined,
       time: new Date(values.time),
+      id: campaign?._id,
     });
   }
 
@@ -162,7 +163,9 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add campaign</DialogTitle>
+          <DialogTitle>
+            {campaign?._id ? "Edit campaign" : "Add campaign"}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -173,7 +176,9 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
               return <FormComponent element={item} key={item.name} />;
             })}
             <DialogFooter className="col-span-2">
-              <Button type="submit">Create</Button>
+              <Button type="submit" loading={addEditMutation.isPending}>
+                {campaign?._id ? "Update" : "Create"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>
