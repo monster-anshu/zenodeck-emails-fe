@@ -80,7 +80,7 @@ const Sidebar: FC<ISidebarProps> = () => {
         )}
       </button>
       <div
-        className="w-60 px-4 py-5"
+        className="w-52 px-2 py-5"
         style={{
           display: isOpen ? "block" : "none",
         }}

@@ -1,18 +1,28 @@
 import { Button } from "@repo/ui/components/button";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import AddEditCampaignModal from "@web-components/campaign/AddEditCampaignModal";
 import Header from "@web-components/Header";
 import { campaignListQueryOptions } from "@web-queries/campaign.query";
-import { FC } from "react";
-import { LuPenLine, LuTrash2 } from "react-icons/lu";
+import { Campaign } from "@web-services/campaign.service";
+import { FC, useState } from "react";
+import { LuEye, LuPenLine, LuTrash2 } from "react-icons/lu";
 import { Link } from "react-router";
 
 type ICampaignPageProps = {};
 
 const CampaignPage: FC<ICampaignPageProps> = () => {
   const { data, isLoading } = useQuery(campaignListQueryOptions);
+  const [selectedForEdit, setSelectedForEdit] = useState<null | Campaign>(null);
   return (
     <main className="container flex-1 overflow-auto p-4">
+      {selectedForEdit && (
+        <AddEditCampaignModal
+          onClose={() => setSelectedForEdit(null)}
+          campaign={selectedForEdit}
+        />
+      )}
+
       <Header
         location={[{ label: "Campaign", link: "/campaign" }]}
         rightSection={
@@ -36,9 +46,17 @@ const CampaignPage: FC<ICampaignPageProps> = () => {
               className="flex items-center gap-2 rounded-lg border p-4"
             >
               <div className="flex-1">
-                <button onClick={() => null}>{campaign.name}</button>
+                <Link to={`/campaign/${campaign._id}`}>{campaign.name}</Link>
               </div>
-              <button aria-label="Edit campaign" onClick={() => null}>
+              <Link to={`/campaign/${campaign._id}`}>
+                <button aria-label="View campaign">
+                  <LuEye />
+                </button>
+              </Link>
+              <button
+                aria-label="Edit campaign"
+                onClick={() => setSelectedForEdit(campaign)}
+              >
                 <LuPenLine />
               </button>
               <button aria-label="Delete campaign" onClick={() => null}>

@@ -8,7 +8,7 @@ const AddLeadListButton: FC<IAddLeadListButtonProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>+ Add</Button>
+      <Button onClick={() => setIsOpen(true)}>+ Add Lead List</Button>
       {isOpen ? (
         <AddEditLeadListModal onClose={() => setIsOpen(false)} />
       ) : null}

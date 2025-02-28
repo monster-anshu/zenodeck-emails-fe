@@ -1,7 +1,11 @@
 :root {
   --skeleton-l1-bg: hsl(var(--secondary));
-  --skeleton-l2-bg: #3f3f3f;
+  --skeleton-l2-bg: #e4e4e4;
   --blink-color: hsl(var(--secondary) / 1);
+}
+
+.dark:root {
+  --skeleton-l2-bg: #3f3f3f;
 }
 
 .skeletonShine {

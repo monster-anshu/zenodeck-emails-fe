@@ -5,3 +5,9 @@ export const campaignListQueryOptions = queryOptions({
   queryKey: ["campaigns"],
   queryFn: CampaignService.list,
 });
+
+export const campaignQueryOptions = (campaignId: string) =>
+  queryOptions({
+    queryKey: ["campaign", campaignId],
+    queryFn: () => CampaignService.get(campaignId),
+  });
