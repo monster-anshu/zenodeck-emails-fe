@@ -56,7 +56,7 @@ const Select = <Option, isMulti extends boolean = false>({
       );
       return optionRecord[value];
     }
-  }, [value]);
+  }, [value, props.options]);
 
   return (
     <RSelect

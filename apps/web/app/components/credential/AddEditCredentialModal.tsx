@@ -172,7 +172,9 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add credential</DialogTitle>
+          <DialogTitle>
+            {initialValue ? "Edit credential" : "Add credential"}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form

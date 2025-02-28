@@ -6,9 +6,9 @@ export class CampaignService {
     return data;
   }
 
-  static async addEdit({ id, ...body }: AddEditCampaignRequest) {
+  static async addEdit(body: AddEditCampaignRequest) {
     const { data } = await client<AddEditResponse>({
-      method: id ? "PATCH" : "POST",
+      method: body.id ? "PATCH" : "POST",
       data: body,
       url: "/campaign",
     });
