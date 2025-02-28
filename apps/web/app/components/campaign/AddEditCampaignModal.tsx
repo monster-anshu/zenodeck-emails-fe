@@ -203,7 +203,7 @@ function timeUntilNextCron() {
 
   // If next run exceeds 60 minutes, adjust to next hour
   if (nextMinutes === 60) {
-    nextRun.setHours(nextRun.getHours() + 1);
+    // nextRun.setHours(nextRun.getHours() + 1);
     nextRun.setMinutes(0);
   }
 
