@@ -20,7 +20,7 @@ import { z } from "zod";
 
 type IAddEditCampaignModalProps = {
   onClose: () => void;
-  editorRef: RefObject<Editor | null>;
+  editorRef?: RefObject<Editor | null>;
   campaign?: Campaign;
 };
 
@@ -75,6 +75,8 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
       time: campaign?.time
         ? formatForInput(new Date(campaign.time))
         : minDateString(),
+      credentialId: campaign?.credentialId,
+      leadListId: campaign?.leadListId,
     },
   });
 
@@ -149,7 +151,9 @@ const AddEditCampaignModal: FC<IAddEditCampaignModalProps> = ({
   function onSubmit(values: z.infer<typeof schema>) {
     addEditMutation.mutate({
       ...values,
-      projectData: JSON.stringify(editorRef.current?.getProjectData()),
+      projectData: editorRef?.current
+        ? JSON.stringify(editorRef?.current?.getProjectData())
+        : undefined,
       time: new Date(values.time),
     });
   }

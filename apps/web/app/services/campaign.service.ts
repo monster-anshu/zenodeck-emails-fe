@@ -50,7 +50,7 @@ type AddEditCampaignRequest = {
   time: Date;
   from: string;
   subject: string;
-  projectData: string;
+  projectData?: string;
   description?: string;
   senderName?: string;
 };

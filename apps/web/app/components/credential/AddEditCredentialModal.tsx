@@ -120,7 +120,7 @@ const AddEditCredentialModal: FC<IAddEditCredentialModalProps> = ({
     },
     {
       name: "type",
-      label: "Product Id",
+      label: "Credential",
       type: "select",
       options: credentialTypeOptions,
     },
